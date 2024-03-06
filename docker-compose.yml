@@ -1,0 +1,120 @@
+version: '3.1'
+
+services:
+  bons-db:
+    container_name: bons-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: bons-service
+      POSTGRES_PASSWORD: bons-service
+      PGDATA: /data/postgres
+    volumes:
+      - bons-db:/data/postgres
+    ports:
+      - "5228:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  colis-db:
+    container_name: colis-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: colis-service
+      POSTGRES_PASSWORD: colis-service
+      PGDATA: /data/postgres
+    volumes:
+      - colis-db:/data/postgres
+    ports:
+      - "5227:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  demandes-db:
+    container_name: demandes-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: demandes-service
+      POSTGRES_PASSWORD: demandes-service
+      PGDATA: /data/postgres
+    volumes:
+      - demandes-db:/data/postgres
+    ports:
+      - "5225:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  facturation-db:
+    container_name: facturation-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: facturation-service
+      POSTGRES_PASSWORD: facturation-service
+      PGDATA: /data/postgres
+    volumes:
+      - facturation-db:/data/postgres
+    ports:
+      - "5224:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  notification-db:
+    container_name: notification-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: notification-service
+      POSTGRES_PASSWORD: notification-service
+      PGDATA: /data/postgres
+    volumes:
+      - notification-db:/data/postgres
+    ports:
+      - "5226:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  parametre-db:
+    container_name: parametre-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: parametre-service
+      POSTGRES_PASSWORD: parametre-service
+      PGDATA: /data/postgres
+    volumes:
+      - parametre-db:/data/postgres
+    ports:
+      - "5223:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  utilisateurs-db:
+    container_name: utilisateurs-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: utilisateurs-service
+      POSTGRES_PASSWORD: utilisateurs-service
+      PGDATA: /data/postgres
+    volumes:
+      - utilisateurs-db:/data/postgres
+    ports:
+      - "5222:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  bons-db:
+  colis-db:
+  demandes-db:
+  facturation-db:
+  notification-db:
+  parametre-db:
+  utilisateurs-db:
