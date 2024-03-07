@@ -1,6 +1,8 @@
 package com.simplon.parametre.repository;
 
 import com.simplon.parametre.model.entity.VilleLivraison;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface VilleLivraisonRepository extends JpaRepository<VilleLivraison, Long> {
+    Page<VilleLivraison> findAll(Pageable pageable);
 }

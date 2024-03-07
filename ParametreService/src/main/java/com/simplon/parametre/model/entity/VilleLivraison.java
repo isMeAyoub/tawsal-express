@@ -3,6 +3,7 @@ package com.simplon.parametre.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The VilleLivraison class represents a city where delivery is available.
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
  * @Author: Ayoub Ait Si Ahmad
  */
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "villeLivraison")
@@ -22,5 +24,4 @@ public class VilleLivraison extends Ville {
             name = "zoneId",
             nullable = false)
     private Zone zone;
-
 }
