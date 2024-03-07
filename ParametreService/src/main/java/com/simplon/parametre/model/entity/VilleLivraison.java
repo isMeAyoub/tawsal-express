@@ -1,9 +1,11 @@
 package com.simplon.parametre.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * The VilleLivraison class represents a city where delivery is available.
@@ -14,7 +16,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "villeLivraison")
 public class VilleLivraison extends Ville {

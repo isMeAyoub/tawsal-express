@@ -1,10 +1,7 @@
 package com.simplon.parametre.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -15,10 +12,9 @@ import lombok.experimental.SuperBuilder;
  */
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "villeRamassage")
 public class VilleRamassage extends Ville {
-
 }

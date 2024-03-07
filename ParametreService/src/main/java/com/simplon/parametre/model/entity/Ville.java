@@ -2,6 +2,7 @@ package com.simplon.parametre.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -12,6 +13,7 @@ import lombok.experimental.SuperBuilder;
  * @Author: Ayoub Ait Si Ahmad
  */
 @Getter
+@Setter
 @SuperBuilder
 @RequiredArgsConstructor
 @MappedSuperclass
