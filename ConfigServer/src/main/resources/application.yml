@@ -5,10 +5,12 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/isMeAyoub/tawsal-express-configurations
+          uri: https://github.com/isMeAyoub/tawsal-express-configurations.git
+          search-paths: configurations
           default-label: main
           username: isMeAyoub
           password: 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
+
 
 
 server:
