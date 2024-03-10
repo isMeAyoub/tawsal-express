@@ -19,6 +19,7 @@
     <module>UtilisateursService</module>
     <module>ParametreService</module>
     <module>NotificationService</module>
+      <module>ConfigServer</module>
   </modules>
 
   <!-- Pom Properties -->
