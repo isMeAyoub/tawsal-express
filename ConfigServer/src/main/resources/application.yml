@@ -1,6 +1,8 @@
 spring:
   application:
     name: configserver
+  profiles:
+    active: git
   cloud:
     config:
       server:
@@ -9,9 +11,13 @@ spring:
           search-paths: configurations
           default-label: main
           username: isMeAyoub
-          password: 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
+          password: '{cipher}07c6fd384f1670968100fccc6b9d047a5ca1fc179b1a6183c9069a1b824ed80f51155503baa07ed154e0f04835628af30b08ebc1650a38ea488c2ad41f27cdab'
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
 
-
+encrypt:
+  key: 'NhU1ULi?cVyNP%+EM@,V4RbEusXYSlpy'
 
 server:
   port: 8888
