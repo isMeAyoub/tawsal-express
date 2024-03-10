@@ -30,6 +30,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- TODO: i don't know why this dependecy don't let the fetching of the config from the github repo pass and success?? i should make research -->
+        <!-- Spring Cloud Monitoring -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-monitor</artifactId>
+        </dependency>
         <!-- Spring Cloud Config Server -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
