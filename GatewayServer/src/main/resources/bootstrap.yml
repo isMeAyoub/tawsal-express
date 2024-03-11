@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: dev
+  main:
+    web-application-type: reactive
+  cloud:
+    config:
+      uri: http://localhost:8888
+    gateway:
+      routes:
+        - id: parametre-service
+          uri: lb://PARAMETRE
+          predicates:
+            - Path=/api/v1/ville-ramassages/**
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: GatewayServer
+    description: "This service is for the gateway server"
+    version: 1.0.0
+
