@@ -1,35 +1,37 @@
 package com.simplon.parametre.service.impl;
 
+import com.simplon.parametre.dtos.request.ZoneRequestDto;
+import com.simplon.parametre.dtos.response.ZoneResponseDto;
+import com.simplon.parametre.mapper.ZoneMapper;
 import com.simplon.parametre.model.entity.Zone;
 import com.simplon.parametre.repository.ZoneRepository;
 import com.simplon.parametre.service.ZoneService;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ZoneServiceImpl implements ZoneService {
-    /*
 
-    private final ZoneRepository zoneRepository;
     private final ZoneMapper zoneMapper;
+    private final ZoneRepository zoneRepository;
     @Override
     public ZoneResponseDto createZone(ZoneRequestDto zoneRequestDto) {
+        log.info("Creating a new zone");
         Zone zone = zoneMapper.toEntity(zoneRequestDto);
-        if (zoneRepository.findByNomZoneIgnoreCase(zone.getNomZone()).isPresent()){
-            throw new RuntimeException("Zone That you added already exists");
+        Optional<Zone> zoneOptional = zoneRepository.findByNomZoneIgnoreCase(zone.getNomZone());
+        if (zoneOptional.isPresent()) {
+            log.error("Zone with name {} already exists", zone.getNomZone());
+            throw new EntityExistsException("Zone with name " + zone.getNomZone() + " already exists");
         }
-        return zoneMapper.toDto1(zoneRepository.save(zone));
+        Zone savedZone = zoneRepository.save(zone);
+        ZoneResponseDto zoneResponseDto = zoneMapper.toDto1(savedZone);
+        log.info("Zone with name {} created successfully", zone.getNomZone());
+        return zoneResponseDto;
     }
-
-    @Override
-    public Page<ZoneResponseDto> getAllZone(Pageable pageable) {
-        Page<Zone> zonePage = zoneRepository.findAll(pageable);
-        Page<ZoneResponseDto> zoneResponseDtosPage = zonePage.map(zoneMapper::toDto1);
-        return zoneResponseDtosPage;
-    }
-
-     */
 }

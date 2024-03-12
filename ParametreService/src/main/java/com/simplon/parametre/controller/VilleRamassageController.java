@@ -4,12 +4,15 @@ import com.simplon.parametre.dtos.request.VilleRamassageRequestDto;
 import com.simplon.parametre.dtos.response.VilleRamassageResponseDto;
 import com.simplon.parametre.service.VilleRamassageService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @Author: Ayoub Ait Si Ahmad
  */
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/ville-ramassages")
@@ -48,7 +52,7 @@ public class VilleRamassageController {
     }
 
     @PutMapping("/{villeId}")
-    public ResponseEntity<VilleRamassageResponseDto> updateVilleRamassage(@PathVariable Long villeId, @Valid @RequestBody VilleRamassageRequestDto villeRamassageRequestDto) {
+    public ResponseEntity<VilleRamassageResponseDto> updateVilleRamassage(@NotNull @PathVariable Long villeId, @Valid @RequestBody VilleRamassageRequestDto villeRamassageRequestDto) {
         log.info("Request received to update VilleRamassage with ID: {}", villeId);
         VilleRamassageResponseDto updatedVilleRamassage = villeRamassageService.updateVilleRamassage(villeRamassageRequestDto, villeId);
         log.info("VilleRamassage with ID {} updated successfully", villeId);
@@ -56,7 +60,7 @@ public class VilleRamassageController {
     }
 
     @PatchMapping("/{villeId}/status")
-    public ResponseEntity<Void> changeStatusOfVilleRamassage(@PathVariable Long villeId) {
+    public ResponseEntity<Void> changeStatusOfVilleRamassage(@NotNull @PathVariable Long villeId) {
         log.info("Request received to change status of VilleRamassage with ID: {}", villeId);
         villeRamassageService.changeStatusOfVilleRamassage(villeId);
         log.info("Status of VilleRamassage with ID: {} changed successfully", villeId);
@@ -64,7 +68,7 @@ public class VilleRamassageController {
     }
 
     @DeleteMapping("/{villeId}")
-    public ResponseEntity<Void> deleteVilleRamassageById(@PathVariable Long villeId) {
+    public ResponseEntity<Void> deleteVilleRamassageById(@NotNull @PathVariable Long villeId) {
         log.info("Request received to delete VilleRamassage with ID: {}", villeId);
         villeRamassageService.deleteVilleRamassageById(villeId);
         log.info("VilleRamassage with ID: {} deleted successfully", villeId);

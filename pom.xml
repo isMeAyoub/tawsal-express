@@ -96,6 +96,12 @@
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-bus-amqp</artifactId>
     </dependency>
+    <!-- Exception Handling Library -->
+    <dependency>
+      <groupId>io.github.wimdeblauwe</groupId>
+      <artifactId>error-handling-spring-boot-starter</artifactId>
+      <version>4.2.0</version>
+    </dependency>
   </dependencies>
 
   <build>

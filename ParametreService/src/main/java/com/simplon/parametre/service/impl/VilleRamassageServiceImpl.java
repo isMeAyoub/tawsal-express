@@ -6,13 +6,17 @@ import com.simplon.parametre.mapper.VilleRamassageMapper;
 import com.simplon.parametre.model.entity.VilleRamassage;
 import com.simplon.parametre.repository.VilleRamassageRepository;
 import com.simplon.parametre.service.VilleRamassageService;
+import io.github.wimdeblauwe.errorhandlingspringbootstarter.ResponseErrorProperty;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Optional;
 
@@ -46,7 +50,7 @@ public class VilleRamassageServiceImpl implements VilleRamassageService {
 
         if (existingVilleRamassage.isPresent()) {
             log.error("VilleRamassage with name: {} or reference: {} already exists", villeRamassage.getNomVille(), villeRamassage.getReference());
-            throw new RuntimeException("VilleRamassage already exists");
+            throw new EntityExistsException("VilleRamassage with name: " + villeRamassage.getNomVille() + " or reference: " + villeRamassage.getReference() + " already exists");
         }
 
         villeRamassage.setIsActive(true);
@@ -77,7 +81,7 @@ public class VilleRamassageServiceImpl implements VilleRamassageService {
         }
         if (checkIfNameAlreadyExists(villeRamassageRequestDto.getNomVille(), villeRamassageRequestDto.getReference(), villeId)) {
             log.error("VilleRamassage with duplicate nomVille or reference exists");
-            throw new RuntimeException("VilleRamassage with duplicate nomVille or reference exists");
+            throw new EntityExistsException("VilleRamassage with name: " + villeRamassageRequestDto.getNomVille() + " or reference: " + villeRamassageRequestDto.getReference() + " already exists");
         }
 
         VilleRamassage existingVilleRamassage = existingVilleRamassageOptional.get();
