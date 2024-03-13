@@ -3,6 +3,7 @@ package com.simplon.parametre.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +29,6 @@ public class Zone {
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "zone",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "zone",fetch = FetchType.EAGER)
     private List<VilleLivraison> villesLivraison;
 }
