@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "villeLivraison")
 public class VilleLivraison extends Ville {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "zoneId",
             nullable = false)

@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/ville-ramassages")
+@RequestMapping("/api/v1/parametre/ville-ramassages")
 public class VilleRamassageController {
 
     private final VilleRamassageService villeRamassageService;

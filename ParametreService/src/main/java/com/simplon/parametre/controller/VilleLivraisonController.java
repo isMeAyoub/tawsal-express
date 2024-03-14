@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/api/v1/ville-livraisons")
+@RequestMapping("/api/v1/parametre/ville-livraisons")
 @RequiredArgsConstructor
 public class VilleLivraisonController {
 

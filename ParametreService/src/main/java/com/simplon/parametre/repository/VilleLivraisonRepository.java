@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Repository interface for VilleLivraison entities.
  * It extends JpaRepository to provide CRUD operations.
@@ -15,4 +17,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VilleLivraisonRepository extends JpaRepository<VilleLivraison, Long> {
     Page<VilleLivraison> findAll(Pageable pageable);
+    Optional<VilleLivraison> findByNomVilleIgnoreCaseOrReferenceIgnoreCase(String nomVille , String reference);
 }

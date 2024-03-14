@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/zones")
+@RequestMapping("/api/v1/parametre/zones")
 public class ZoneController {
 
     private final ZoneService zoneService;
