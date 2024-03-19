@@ -36,12 +36,12 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
 
     @Override
     public VilleLivraisonResponseDto createVilleLivraison(VilleLivraisonRequestDto villeLivraisonRequestDto) {
-       log.info("Creating a new VilleLivraison");
-       VilleLivraison villeLivraison = villeLivraisonMapper.toEntity(villeLivraisonRequestDto);
-       log.info("VilleLivraisonRequestDto mapped to VilleLivraison : {}", villeLivraison);
+        log.info("Creating a new VilleLivraison");
+        VilleLivraison villeLivraison = villeLivraisonMapper.toEntity(villeLivraisonRequestDto);
+        log.info("VilleLivraisonRequestDto mapped to VilleLivraison : {}", villeLivraison);
         Optional<VilleLivraison> villeLivraisonOptional = villeLivraisonRepository
-                .findByNomVilleIgnoreCaseOrReferenceIgnoreCase(villeLivraison.getNomVille(),villeLivraison.getReference());
-        if (villeLivraisonOptional.isPresent()){
+                .findByNomVilleIgnoreCaseOrReferenceIgnoreCase(villeLivraison.getNomVille(), villeLivraison.getReference());
+        if (villeLivraisonOptional.isPresent()) {
             log.warn("VilleLivraison already exist");
             throw new EntityExistsException("VilleLivraison already exist");
         }
@@ -52,7 +52,7 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
         villeLivraison.setZone(zoneRepository.findById(villeLivraisonRequestDto.getZone().getZoneId()).orElseThrow());
         VilleLivraison villeLivraison1 = villeLivraisonRepository.save(villeLivraison);
         VilleLivraisonResponseDto villeLivraisonResponseDto = villeLivraisonMapper.toDto1(villeLivraison1);
-        log.info("{}" , villeLivraisonOptional);
+        log.info("{}", villeLivraisonOptional);
         return villeLivraisonResponseDto;
     }
 
@@ -66,25 +66,30 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
         return villeLivraisonResponseDto;
     }
 
-
-    // TODO: i should fix this method
     @Override
     public VilleLivraisonResponseDto updateVilleLivraison(Long id, VilleLivraisonRequestDto villeLivraisonRequestDto) {
         log.info("Updating VilleLivraison with id : {}", id);
         VilleLivraison villeLivraison = villeLivraisonRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("VilleLivraison not found with id : " + id)
         );
-        VilleLivraison villeLivraison1 = villeLivraisonRepository.findByNomVilleIgnoreCaseOrReferenceIgnoreCaseAndVilleIdNot(villeLivraisonRequestDto.getNomVille(), villeLivraisonRequestDto.getReference(), id).orElseThrow(
-                () -> new EntityExistsException("VilleLivraison already exist")
-        );
+        Optional<VilleLivraison> villeLivraisonOptional = villeLivraisonRepository
+                .findByNomVilleIgnoreCaseAndVilleIdNotOrReferenceIgnoreCaseAndVilleIdNot(villeLivraisonRequestDto.getNomVille(), id, villeLivraisonRequestDto.getReference(), id);
+        if (villeLivraisonOptional.isPresent()) {
+            log.warn("VilleLivraison already exist");
+            throw new EntityExistsException(" VilleLivraison with the same nomVille or reference already exist");
+        }
         villeLivraison.setNomVille(villeLivraisonRequestDto.getNomVille());
         villeLivraison.setReference(villeLivraisonRequestDto.getReference());
-        villeLivraison.setZone(zoneRepository.findById(villeLivraisonRequestDto.getZone().getZoneId()).orElseThrow());
-        villeLivraison1 = villeLivraisonRepository.save(villeLivraison);
+        Zone zone = zoneRepository.findById(villeLivraisonRequestDto.getZone().getZoneId()).orElseThrow(
+                () -> new EntityNotFoundException("Zone not found with id : " + villeLivraisonRequestDto.getZone().getZoneId())
+        );
+        villeLivraison.setZone(zone);
+        VilleLivraison villeLivraison1 = villeLivraisonRepository.save(villeLivraison);
         VilleLivraisonResponseDto villeLivraisonResponseDto = villeLivraisonMapper.toDto1(villeLivraison1);
         log.info("VilleLivraison updated successfully");
         return villeLivraisonResponseDto;
     }
+
     @Override
     public void deleteVilleLivraison(Long id) {
         log.info("Deleting VilleLivraison by id : {}", id);
@@ -96,7 +101,7 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
     }
 
     @Override
-    public Page<VilleLivraisonResponseDto> getAllVilleLivraison(Pageable pageable , String search) {
+    public Page<VilleLivraisonResponseDto> getAllVilleLivraison(Pageable pageable, String search) {
         log.info("Getting all VilleLivraison");
         Page<VilleLivraison> villeLivraisonPage = villeLivraisonRepository.getALlVilleLivraisonAndSearch(search, pageable);
         Page<VilleLivraisonResponseDto> villeLivraisonResponseDtoPage = villeLivraisonPage.map(villeLivraisonMapper::toDto1);

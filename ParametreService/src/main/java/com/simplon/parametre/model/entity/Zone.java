@@ -1,5 +1,6 @@
 package com.simplon.parametre.model.entity;
 
+import com.simplon.parametre.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "zone")
-public class Zone {
+public class Zone extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "zoneId")
@@ -30,6 +31,6 @@ public class Zone {
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "zone",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "zone", fetch = FetchType.EAGER)
     private List<VilleLivraison> villesLivraison;
 }

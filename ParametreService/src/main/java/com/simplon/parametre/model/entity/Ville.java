@@ -1,5 +1,6 @@
 package com.simplon.parametre.model.entity;
 
+import com.simplon.parametre.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @RequiredArgsConstructor
 @MappedSuperclass
-public class Ville {
+public class Ville extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

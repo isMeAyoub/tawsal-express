@@ -18,10 +18,10 @@ import java.util.Optional;
  */
 @Repository
 public interface VilleLivraisonRepository extends JpaRepository<VilleLivraison, Long> {
+
     Page<VilleLivraison> findAll(Pageable pageable);
     Optional<VilleLivraison> findByNomVilleIgnoreCaseOrReferenceIgnoreCase(String nomVille , String reference);
-    Optional<VilleLivraison> findByNomVilleIgnoreCaseOrReferenceIgnoreCaseAndVilleIdNot(String nomVille, String reference, Long villeId);
-
+    Optional<VilleLivraison> findByNomVilleIgnoreCaseAndVilleIdNotOrReferenceIgnoreCaseAndVilleIdNot(String nomVille, Long id, String reference, Long id2);
     @Query("SELECT v FROM VilleLivraison v JOIN v.zone z WHERE (:search IS NULL OR (LOWER(v.nomVille) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(v.reference) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(z.nomZone) LIKE LOWER(CONCAT('%', :search, '%'))))")
     Page<VilleLivraison> getALlVilleLivraisonAndSearch(@Param("search") String search, Pageable pageable);
 }

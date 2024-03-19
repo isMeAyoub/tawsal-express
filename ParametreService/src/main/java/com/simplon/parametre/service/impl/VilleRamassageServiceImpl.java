@@ -111,7 +111,6 @@ public class VilleRamassageServiceImpl implements VilleRamassageService {
         return conflictingVilleRamassage.isPresent();
     }
 
-
     @Override
     public void changeStatusOfVilleRamassage(Long villeId) {
         log.info("Request received to change status of VilleRamassage with ID: {}", villeId);

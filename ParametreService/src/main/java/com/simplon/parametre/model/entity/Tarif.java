@@ -1,5 +1,6 @@
 package com.simplon.parametre.model.entity;
 
+import com.simplon.parametre.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +18,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "tarif")
-public class Tarif {
+public class Tarif extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "tarifId")
