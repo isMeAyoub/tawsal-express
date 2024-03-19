@@ -13,7 +13,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -103,7 +105,8 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
     @Override
     public Page<VilleLivraisonResponseDto> getAllVilleLivraison(Pageable pageable, String search) {
         log.info("Getting all VilleLivraison");
-        Page<VilleLivraison> villeLivraisonPage = villeLivraisonRepository.getALlVilleLivraisonAndSearch(search, pageable);
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "lastModifiedDate"));
+        Page<VilleLivraison> villeLivraisonPage = villeLivraisonRepository.getALlVilleLivraisonAndSearch(search, sortedPageable);
         Page<VilleLivraisonResponseDto> villeLivraisonResponseDtoPage = villeLivraisonPage.map(villeLivraisonMapper::toDto1);
         log.info("All VilleLivraison returned successfully");
         return villeLivraisonResponseDtoPage;
@@ -120,5 +123,6 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
         log.info("Status of VilleLivraison changed successfully");
     }
 
-
+    // TODO : if i have time i will implement this method
+    // Delete a VilleLivraison from a Zone and Add VilleLivraison to a Zone
 }

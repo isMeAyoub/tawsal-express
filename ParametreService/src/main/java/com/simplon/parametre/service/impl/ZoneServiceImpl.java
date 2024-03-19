@@ -11,7 +11,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -95,7 +97,8 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public Page<ZoneResponseDto> getAllZones(Pageable pageable,String search) {
         log.info("Fetching all zones");
-        Page<Zone> zones = zoneRepository.findAllByNomZone(pageable, search);
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "lastModifiedDate"));
+        Page<Zone> zones = zoneRepository.findAllByNomZone(sortedPageable, search);
         Page<ZoneResponseDto> zoneResponseDtos = zones.map(zoneMapper::toDto1);
         log.info("All zones fetched successfully");
         return zoneResponseDtos;

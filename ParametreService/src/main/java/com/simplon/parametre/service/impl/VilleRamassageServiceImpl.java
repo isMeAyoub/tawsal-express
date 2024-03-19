@@ -13,7 +13,9 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -64,8 +66,8 @@ public class VilleRamassageServiceImpl implements VilleRamassageService {
     @Override
     public Page<VilleRamassageResponseDto> getAllVilleRamassage(String search, Pageable pageable) {
         log.info("Request received to get all VilleRamassage (search: {}, pageable: {})", search, pageable);
-        Page<VilleRamassage> villeRamassagePage = villeRamassageRepository.searchVilleRamassage(search, pageable);
-
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "lastModifiedDate"));
+        Page<VilleRamassage> villeRamassagePage = villeRamassageRepository.searchVilleRamassage(search, sortedPageable);
         log.debug("Retrieved VilleRamassage page from repository: {}", villeRamassagePage);
         return villeRamassagePage.map(villeRamassageMapper::toDto1);
     }
