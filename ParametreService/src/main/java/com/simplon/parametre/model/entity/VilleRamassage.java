@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @SuperBuilder
 @Entity
 @Table(name = "villeRamassage")

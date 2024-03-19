@@ -13,4 +13,5 @@ error:
         persistence:
           EntityNotFoundException: not_found
           EntityExistsException: conflict
+
     http-status-in-json-response: true

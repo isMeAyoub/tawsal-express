@@ -1,10 +1,7 @@
 package com.simplon.parametre.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -18,12 +15,13 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @SuperBuilder
 @Entity
 @Table(name = "villeLivraison")
 public class VilleLivraison extends Ville {
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(
             name = "zoneId",
             nullable = false)

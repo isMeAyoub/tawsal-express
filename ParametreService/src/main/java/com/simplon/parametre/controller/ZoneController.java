@@ -47,11 +47,14 @@ public class ZoneController {
 
     @GetMapping
     ResponseEntity<Page<ZoneResponseDto>> getAllZones(
-            @RequestParam(defaultValue = "0", required = false) int page,
-            @RequestParam(defaultValue = "10", required = false) int size) {
+            @RequestParam(defaultValue = "0", required = false, value = "page") int page,
+            @RequestParam(defaultValue = "10", required = false, value = "size") int size,
+            @RequestParam(defaultValue = "", required = false, value = "search") String search
+
+    ) {
         log.info("Request received to get all Zones");
         Pageable pageable = Pageable.ofSize(size).withPage(page);
-        Page<ZoneResponseDto> zoneResponseDtoPage = zoneService.getAllZones(pageable);
+        Page<ZoneResponseDto> zoneResponseDtoPage = zoneService.getAllZones(pageable, search);
         log.info("Zones retrieved successfully");
         return ResponseEntity.ok(zoneResponseDtoPage);
     }

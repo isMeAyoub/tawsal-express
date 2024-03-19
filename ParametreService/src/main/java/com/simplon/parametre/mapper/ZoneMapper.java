@@ -5,6 +5,10 @@ import com.simplon.parametre.dtos.response.ZoneResponseDto;
 import com.simplon.parametre.model.entity.Zone;
 import org.mapstruct.*;
 
+/**
+ * Mapper for {@link com.simplon.parametre.model.entity.Zone}
+ * Contains the methods to convert the data
+ */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ZoneMapper {
     Zone toEntity(ZoneRequestDto zoneRequestDto);

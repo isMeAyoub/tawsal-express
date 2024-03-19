@@ -51,6 +51,14 @@ public class VilleRamassageController {
         return new ResponseEntity<>(villeRamassageResponseDto, HttpStatus.OK);
     }
 
+    @GetMapping("/{villeId}")
+    public ResponseEntity<VilleRamassageResponseDto> getVilleRamassageById(@NotNull @PathVariable Long villeId) {
+        log.info("Request received to get VilleRamassage with ID: {}", villeId);
+        VilleRamassageResponseDto villeRamassageResponseDto = villeRamassageService.getVilleRamassageById(villeId);
+        log.info("VilleRamassage with ID: {} retrieved successfully", villeId);
+        return new ResponseEntity<>(villeRamassageResponseDto, HttpStatus.OK);
+    }
+
     @PutMapping("/{villeId}")
     public ResponseEntity<VilleRamassageResponseDto> updateVilleRamassage(@NotNull @PathVariable Long villeId, @Valid @RequestBody VilleRamassageRequestDto villeRamassageRequestDto) {
         log.info("Request received to update VilleRamassage with ID: {}", villeId);

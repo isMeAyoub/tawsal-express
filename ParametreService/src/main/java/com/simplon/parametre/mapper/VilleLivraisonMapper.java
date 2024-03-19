@@ -5,6 +5,10 @@ import com.simplon.parametre.dtos.response.VilleLivraisonResponseDto;
 import com.simplon.parametre.model.entity.VilleLivraison;
 import org.mapstruct.*;
 
+/**
+ * Mapper for {@link com.simplon.parametre.model.entity.VilleLivraison}
+ * Contains the methods to convert the data
+ */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface VilleLivraisonMapper {
     VilleLivraison toEntity(VilleLivraisonRequestDto villeLivraisonRequestDto);

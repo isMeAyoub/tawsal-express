@@ -93,10 +93,9 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public Page<ZoneResponseDto> getAllZones(Pageable pageable) {
-        // TODO: ADD THE SEARCH FUNCTIONALITY
+    public Page<ZoneResponseDto> getAllZones(Pageable pageable,String search) {
         log.info("Fetching all zones");
-        Page<Zone> zones = zoneRepository.findAll(pageable);
+        Page<Zone> zones = zoneRepository.findAllByNomZone(pageable, search);
         Page<ZoneResponseDto> zoneResponseDtos = zones.map(zoneMapper::toDto1);
         log.info("All zones fetched successfully");
         return zoneResponseDtos;

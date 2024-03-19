@@ -71,6 +71,15 @@ public class VilleRamassageServiceImpl implements VilleRamassageService {
     }
 
     @Override
+    public VilleRamassageResponseDto getVilleRamassageById(Long villeId) {
+        log.info("Request received to get VilleRamassage with ID: {}", villeId);
+        VilleRamassage villeRamassageOptional = villeRamassageRepository.findById(villeId).orElseThrow(
+                () -> new EntityNotFoundException("VilleRamassage with ID " + villeId + " not found"));
+        log.debug("Retrieved VilleRamassage from repository: {}", villeRamassageOptional);
+        return villeRamassageMapper.toDto1(villeRamassageOptional);
+    }
+
+    @Override
     public VilleRamassageResponseDto updateVilleRamassage(VilleRamassageRequestDto villeRamassageRequestDto,
                                                           Long villeId) {
         log.info("Request received to update VilleRamassage with ID: {}", villeId);

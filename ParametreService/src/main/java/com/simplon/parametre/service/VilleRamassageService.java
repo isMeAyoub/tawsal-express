@@ -16,6 +16,7 @@ public interface VilleRamassageService {
     VilleRamassageResponseDto createVilleRamassage(VilleRamassageRequestDto villeRamassageRequestDto);
 
     Page<VilleRamassageResponseDto> getAllVilleRamassage(String search, Pageable pageable);
+    VilleRamassageResponseDto getVilleRamassageById(Long villeId);
 
     VilleRamassageResponseDto updateVilleRamassage(VilleRamassageRequestDto villeRamassageRequestDto, Long villeId);
 
