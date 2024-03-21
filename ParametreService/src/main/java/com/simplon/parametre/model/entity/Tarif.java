@@ -17,6 +17,7 @@ import lombok.*;
 @Entity
 @Table(name = "tarif")
 public class Tarif extends Auditable<String> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "tarifId")

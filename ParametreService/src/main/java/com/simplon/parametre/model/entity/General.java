@@ -8,12 +8,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * This Class if For General Information of the Application
+ * Should Be Initialized Once and Am using Singleton Pattern
+ *
+ * @Author: Ayoub Ait Si Ahmad
+ */
 @Data
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "general")
 public class General {
+
     @Id
     @Column(name = "generalId")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "general_sequence")
@@ -60,13 +67,13 @@ public class General {
 
     public void initialize() {
         if (!isInitialized) {
-            instance.setLogo("logossss.png");
+            instance.setLogo("logo.png");
             instance.setFavicon("favicon.png");
-            instance.setNomEntreprise("Simplon");
-            instance.setWebSite("https://www.simplon.co/");
-            instance.setAdresseEntreprise("Rue de la République, 13002 Marseille");
-            instance.setTelephoneEntreprise("04 91 91 91 91");
-            instance.setEmailEntreprise("simplon@gmail.com");
+            instance.setNomEntreprise("Tawsal Express");
+            instance.setWebSite("https://www.tawsal-express.co/");
+            instance.setAdresseEntreprise("Casablanca, Maroc");
+            instance.setTelephoneEntreprise("0600000000");
+            instance.setEmailEntreprise("tawsal.express@gmail.com");
             instance.setMonnaieApplication("Dhs");
             isInitialized = true;
         } else {
