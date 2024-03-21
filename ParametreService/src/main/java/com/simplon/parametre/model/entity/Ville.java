@@ -2,6 +2,7 @@ package com.simplon.parametre.model.entity;
 
 import com.simplon.parametre.audit.Auditable;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ import lombok.experimental.SuperBuilder;
  *
  * @Author: Ayoub Ait Si Ahmad
  */
-@Getter
-@Setter
+
+@Data
 @SuperBuilder
 @RequiredArgsConstructor
 @MappedSuperclass

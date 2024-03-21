@@ -2,18 +2,14 @@ package com.simplon.parametre.dtos.response;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Value;
+import lombok.*;
 
 import java.io.Serializable;
 
 /**
  * DTO for {@link com.simplon.parametre.model.entity.Tarif}
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class TarifResponseDto implements Serializable {
     @NotNull(message = "tarifId is required")
@@ -34,8 +30,7 @@ public class TarifResponseDto implements Serializable {
     /**
      * DTO for {@link com.simplon.parametre.model.entity.VilleLivraison}
      */
-    @Getter
-    @Setter
+    @Data
     @NoArgsConstructor
     public static class VilleLivraisonDto implements Serializable {
         @NotNull(message = "villeId is required")
@@ -49,8 +44,7 @@ public class TarifResponseDto implements Serializable {
     /**
      * DTO for {@link com.simplon.parametre.model.entity.VilleRamassage}
      */
-    @Getter
-    @Setter
+    @Data
     @NoArgsConstructor
     public static class VilleRamassageDto implements Serializable {
         @NotNull(message = "villeId is required")

@@ -2,18 +2,14 @@ package com.simplon.parametre.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Value;
+import lombok.*;
 
 import java.io.Serializable;
 
 /**
  * DTO for {@link com.simplon.parametre.model.entity.VilleLivraison}
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class VilleLivraisonRequestDto implements Serializable {
     @NotBlank(message = "reference is required")
@@ -26,8 +22,7 @@ public class VilleLivraisonRequestDto implements Serializable {
     /**
      * DTO for {@link com.simplon.parametre.model.entity.Zone}
      */
-    @Getter
-    @Setter
+    @Data
     @NoArgsConstructor
     public static class ZoneDto implements Serializable {
         @NotNull(message = "zoneId is required")

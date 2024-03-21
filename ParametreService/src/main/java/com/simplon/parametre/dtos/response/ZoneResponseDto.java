@@ -2,10 +2,7 @@ package com.simplon.parametre.dtos.response;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Value;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,8 +10,7 @@ import java.util.List;
 /**
  * DTO for {@link com.simplon.parametre.model.entity.Zone}
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class ZoneResponseDto implements Serializable {
     @NotNull(message = "zoneId is required")
@@ -29,8 +25,7 @@ public class ZoneResponseDto implements Serializable {
     /**
      * DTO for {@link com.simplon.parametre.model.entity.VilleLivraison}
      */
-    @Getter
-    @Setter
+    @Data
     @NoArgsConstructor
     public static class VilleLivraisonDto implements Serializable {
         @NotNull(message = "villeId is required")

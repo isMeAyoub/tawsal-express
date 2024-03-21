@@ -11,11 +11,10 @@ import lombok.experimental.SuperBuilder;
  *
  * @Author: Ayoub Ait Si Ahmad
  */
-@Getter
-@Setter
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @SuperBuilder
 @Entity
 @Table(name = "villeLivraison")

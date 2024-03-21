@@ -105,6 +105,7 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     private Zone findZoneById(Long zoneId) {
+        log.info("Fetching zone with id {}", zoneId);
         return zoneRepository.findById(zoneId).orElseThrow(() -> entityNotFoundException(zoneId));
     }
 

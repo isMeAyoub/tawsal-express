@@ -38,7 +38,7 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
 
     @Override
     public VilleLivraisonResponseDto createVilleLivraison(VilleLivraisonRequestDto villeLivraisonRequestDto) {
-        log.info("Creating a new VilleLivraison");
+        log.info("Attempting to create a new VilleLivraison : {}", villeLivraisonRequestDto);
         VilleLivraison villeLivraison = villeLivraisonMapper.toEntity(villeLivraisonRequestDto);
         log.info("VilleLivraisonRequestDto mapped to VilleLivraison : {}", villeLivraison);
         Optional<VilleLivraison> villeLivraisonOptional = villeLivraisonRepository
@@ -54,42 +54,39 @@ public class VilleLivraisonServiceImpl implements VilleLivraisonService {
         villeLivraison.setZone(zoneRepository.findById(villeLivraisonRequestDto.getZone().getZoneId()).orElseThrow());
         VilleLivraison villeLivraison1 = villeLivraisonRepository.save(villeLivraison);
         VilleLivraisonResponseDto villeLivraisonResponseDto = villeLivraisonMapper.toDto1(villeLivraison1);
-        log.info("{}", villeLivraisonOptional);
-        return villeLivraisonResponseDto;
+        log.info("VilleLivraison created successfully : {}", villeLivraison1);
+        return villeLivraisonMapper.toDto1(villeLivraison1);
     }
 
     @Override
     public VilleLivraisonResponseDto getByIdVilleLivraison(Long id) {
-        log.info("Getting VilleLivraison by id : {}", id);
+        log.info("Attempting to get VilleLivraison by id : {}", id);
         VilleLivraison villeLivraison = villeLivraisonRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("VilleLivraison not found with id : " + id)
         );
         VilleLivraisonResponseDto villeLivraisonResponseDto = villeLivraisonMapper.toDto1(villeLivraison);
+        log.info("VilleLivraison retrieved successfully : {}", villeLivraisonResponseDto);
         return villeLivraisonResponseDto;
     }
 
     @Override
     public VilleLivraisonResponseDto updateVilleLivraison(Long id, VilleLivraisonRequestDto villeLivraisonRequestDto) {
-        log.info("Updating VilleLivraison with id : {}", id);
-        VilleLivraison villeLivraison = villeLivraisonRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("VilleLivraison not found with id : " + id)
-        );
+        log.info("Attempting to update VilleLivraison with id : {}", id);
+        VilleLivraison villeLivraison = villeLivraisonRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("VilleLivraison not found : " + id));
         Optional<VilleLivraison> villeLivraisonOptional = villeLivraisonRepository
                 .findByNomVilleIgnoreCaseAndVilleIdNotOrReferenceIgnoreCaseAndVilleIdNot(villeLivraisonRequestDto.getNomVille(), id, villeLivraisonRequestDto.getReference(), id);
         if (villeLivraisonOptional.isPresent()) {
             log.warn("VilleLivraison already exist");
             throw new EntityExistsException(" VilleLivraison with the same nomVille or reference already exist");
         }
-        villeLivraison.setNomVille(villeLivraisonRequestDto.getNomVille());
-        villeLivraison.setReference(villeLivraisonRequestDto.getReference());
         Zone zone = zoneRepository.findById(villeLivraisonRequestDto.getZone().getZoneId()).orElseThrow(
                 () -> new EntityNotFoundException("Zone not found with id : " + villeLivraisonRequestDto.getZone().getZoneId())
         );
-        villeLivraison.setZone(zone);
-        VilleLivraison villeLivraison1 = villeLivraisonRepository.save(villeLivraison);
-        VilleLivraisonResponseDto villeLivraisonResponseDto = villeLivraisonMapper.toDto1(villeLivraison1);
-        log.info("VilleLivraison updated successfully");
-        return villeLivraisonResponseDto;
+        villeLivraison = villeLivraisonMapper.partialUpdate(villeLivraisonRequestDto, villeLivraison);
+        villeLivraison = villeLivraisonRepository.save(villeLivraison);
+        log.info("VilleLivraison updated successfully : {}", villeLivraison);
+        return villeLivraisonMapper.toDto1(villeLivraison);
     }
 
     @Override

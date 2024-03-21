@@ -13,11 +13,9 @@ import java.util.List;
  *
  * @Author: Ayoub Ait Si Ahmad
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
 @Entity
 @Table(name = "zone")

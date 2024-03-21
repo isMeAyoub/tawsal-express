@@ -10,10 +10,9 @@ import lombok.experimental.SuperBuilder;
  *
  * @Author: Ayoub Ait Si Ahmad
  */
-@Getter
-@Setter
+
+@Data
 @NoArgsConstructor
-@ToString
 @SuperBuilder
 @Entity
 @Table(name = "villeRamassage")

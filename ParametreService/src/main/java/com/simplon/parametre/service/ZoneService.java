@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
  * This service layer interface defines business logic operations for Zone entities.
  * It provides methods for CRUD operations (Create, Read, Update, Delete)
  * and other relevant functionalities related to Zone management.
+ *
+ * @Author: Ayoub Ait Si Ahmad
  */
 public interface ZoneService {
     ZoneResponseDto createZone(ZoneRequestDto zoneRequestDto);

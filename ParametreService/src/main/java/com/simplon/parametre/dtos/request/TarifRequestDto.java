@@ -4,23 +4,17 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Value;
+import lombok.*;
 
 import java.io.Serializable;
 
 /**
  * DTO for {@link com.simplon.parametre.model.entity.Tarif}
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class TarifRequestDto implements Serializable {
     @NotNull(message = "prixLivraison is required")
-    @Min(10)
-    @Max(30)
     Double prixLivraison;
     @NotNull(message = "prixRetour is required")
     Double prixRetour;
@@ -36,8 +30,7 @@ public class TarifRequestDto implements Serializable {
     /**
      * DTO for {@link com.simplon.parametre.model.entity.VilleLivraison}
      */
-    @Getter
-    @Setter
+    @Data
     @NoArgsConstructor
     public static class VilleLivraisonDto implements Serializable {
         @NotNull(message = "villeId is required")
@@ -47,8 +40,7 @@ public class TarifRequestDto implements Serializable {
     /**
      * DTO for {@link com.simplon.parametre.model.entity.VilleRamassage}
      */
-    @Getter
-    @Setter
+    @Data
     @NoArgsConstructor
     public static class VilleRamassageDto implements Serializable {
         @NotNull(message = "villeId is required")
