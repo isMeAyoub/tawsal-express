@@ -59,10 +59,18 @@ public class GeneralServiceImpl implements GeneralService {
     @Override
     public GeneralResponseDto updateGeneral(GeneralRequestDto generalRequestDto) {
         log.info("Update general information");
-        General general = General.getInstance();
-        log.debug("General information {}", general);
+
+        // Fetch the existing General instance from the database
+        General general = generalRepository.findAll().stream().findFirst().orElseThrow(
+                () -> new RuntimeException("General instance not found")
+        );
+
+        // Update the fields of the fetched General instance
         generalMapper.partialUpdate(generalRequestDto, general);
+
+        // Save the updated General instance
         generalRepository.save(general);
+
         log.debug("Update general information {}", general);
         return generalMapper.toDto1(general);
     }
