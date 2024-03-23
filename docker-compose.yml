@@ -10,7 +10,7 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
-        - db
+      - db
     restart: unless-stopped
 
   bons-db:
@@ -118,6 +118,21 @@ services:
       - db
     restart: unless-stopped
 
+  media-db:
+    container_name: media-service-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: media-service
+      POSTGRES_PASSWORD: media-service
+      PGDATA: /data/postgres
+    volumes:
+      - media-db:/data/postgres
+    ports:
+      - "5229:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
 networks:
   db:
     driver: bridge
@@ -130,4 +145,5 @@ volumes:
   notification-db:
   parametre-db:
   utilisateurs-db:
+  media-db:
   rabbitmq-data:
