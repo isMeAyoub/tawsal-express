@@ -23,6 +23,7 @@
     <module>EurekaServer</module>
     <module>GatewayServer</module>
       <module>MediaSafeService</module>
+      <module>FeignClients</module>
   </modules>
 
   <!-- Pom Properties -->
@@ -102,6 +103,11 @@
       <groupId>io.github.wimdeblauwe</groupId>
       <artifactId>error-handling-spring-boot-starter</artifactId>
       <version>4.2.0</version>
+    </dependency>
+    <!-- Spring Cloud OpenFeign -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
     </dependency>
   </dependencies>
 

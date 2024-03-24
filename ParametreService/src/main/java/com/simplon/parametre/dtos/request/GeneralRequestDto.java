@@ -2,10 +2,9 @@ package com.simplon.parametre.dtos.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
@@ -16,10 +15,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class GeneralRequestDto implements Serializable {
 
-    @NotEmpty(message = "logo is required")
-    String logo;
-    @NotEmpty(message = "favicon is required")
-    String favicon;
     @NotEmpty(message = "nomEntreprise is required")
     String nomEntreprise;
     @NotEmpty(message = "webSite is required")
