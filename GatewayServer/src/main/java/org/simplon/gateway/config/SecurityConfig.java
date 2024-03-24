@@ -1,41 +1,55 @@
 package org.simplon.gateway.config;
 
+import java.io.IOException;
+
+import org.keycloak.adapters.authorization.integration.jakarta.ServletPolicyEnforcerFilter;
+import org.keycloak.adapters.authorization.spi.ConfigurationResolver;
+import org.keycloak.adapters.authorization.spi.HttpRequest;
+import org.keycloak.representations.adapters.config.PolicyEnforcerConfig;
+import org.keycloak.util.JsonSerialization;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-import reactor.core.publisher.Mono;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * This class configures the security with Keycloak for the webflux application.
- * @Author: Ayoub Ait Si AHmad
+ * OAuth resource configuration.
+ *
+ * @author Ayoub Ait Si Ahmad
  */
 @Configuration
-@EnableWebFluxSecurity
+@EnableWebSecurity
 public class SecurityConfig {
 
-    // This method configures the security filters for the webflux application and permits all requests.
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity) {
-        serverHttpSecurity.authorizeExchange(exchanges -> exchanges.anyExchange().permitAll()) // Permit all requests
-                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor()))); // Configure JWT authentication
-        serverHttpSecurity.csrf(csrfSpec -> csrfSpec.disable()); // Disable CSRF protection
-        return serverHttpSecurity.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(t -> t.disable());
+        http.addFilterAfter(createPolicyEnforcerFilter(),
+                BearerTokenAuthenticationFilter.class);
+        http.sessionManagement(t -> t.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
     }
 
-    // This method defines the logic to extract granted authorities from the JWT token.
-    private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter()); // Use KeycloakRoleConverter to extract authorities
-        return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter); // Return converter for reactive streams
+    private ServletPolicyEnforcerFilter createPolicyEnforcerFilter() {
+        return new ServletPolicyEnforcerFilter(new ConfigurationResolver() {
+            @Override
+            public PolicyEnforcerConfig resolve(HttpRequest request) {
+                try {
+                    return JsonSerialization.readValue(
+                            getClass().getResourceAsStream("/policy-enforcer.json"),
+                            PolicyEnforcerConfig.class);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
 }

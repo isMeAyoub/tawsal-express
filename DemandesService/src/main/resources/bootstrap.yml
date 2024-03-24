@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: demandes
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+error:
+  handling:
+    http-statuses:
+      jakarta:
+        persistence:
+          EntityNotFoundException: not_found
+          EntityExistsException: conflict
+
+    http-status-in-json-response: true
