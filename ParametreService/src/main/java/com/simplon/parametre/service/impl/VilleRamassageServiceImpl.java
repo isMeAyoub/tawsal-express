@@ -6,7 +6,6 @@ import com.simplon.parametre.mapper.VilleRamassageMapper;
 import com.simplon.parametre.model.entity.VilleRamassage;
 import com.simplon.parametre.repository.VilleRamassageRepository;
 import com.simplon.parametre.service.VilleRamassageService;
-import io.github.wimdeblauwe.errorhandlingspringbootstarter.ResponseErrorProperty;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;

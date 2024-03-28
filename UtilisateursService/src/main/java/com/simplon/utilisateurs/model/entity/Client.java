@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @PrimaryKeyJoinColumn(name = "client_id")
 public class Client extends Utilisateur {
 
-    @Column(name = "nom_entreprise", nullable = false)
+    @Column(name = "nom_entreprise", nullable = false ,unique = true)
     private String nomEntreprise;
 
     @Column(name = "site_web", nullable = false)
@@ -33,12 +33,14 @@ public class Client extends Utilisateur {
     @Column(name = "type_entreprise", nullable = false)
     private TypeEntreprise typeEntreprise;
 
-    @Column(name = "registre_commerce", nullable = false)
+    @Column(name = "registre_commerce", nullable = false ,unique = true)
     private String registreCommerce;
 
     // TODO: should make relation with ville ramassage
     @Column(name = "ville_ramassage_id", nullable = false)
     private Long villeRamassageId;
 
+    @Column(name = "zone_id", nullable = false)
+    private Long zoneId;
     // TODO: should make relation with colis, reclamations , demandesRamassage
 }

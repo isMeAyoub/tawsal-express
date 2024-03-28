@@ -29,9 +29,14 @@ public class Reclamations extends Auditable<String> {
 
     @Column(name = "objet", nullable = false)
     private String objet;
+
     @Column(name = "message", nullable = false)
     private String message;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "etat", nullable = false)
     private ReclamationsEtat etat;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 }

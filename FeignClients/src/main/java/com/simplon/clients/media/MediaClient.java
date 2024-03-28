@@ -1,9 +1,11 @@
 package com.simplon.clients.media;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,6 +19,14 @@ import java.io.IOException;
 @FeignClient(value = "MEDIA")
 public interface MediaClient {
 
-    @PostMapping(value = "/api/v1/media/file")
-    ResponseEntity<FileDataResponseDto> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException;
+    /**
+     * This endpoint is used to upload an image to the file system
+     * I had to change the RequestParam to RequestPart because the media service is expecting a RequestPart
+     *
+     * @param file
+     * @return FileDataResponseDto
+     * @throws IOException
+     */
+    @PostMapping(value = "/api/v1/media/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<FileDataResponseDto> uploadImageToFIleSystem(@RequestPart("image") MultipartFile file) throws IOException;
 }

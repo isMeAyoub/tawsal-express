@@ -94,9 +94,7 @@ public class GeneralServiceImpl implements GeneralService {
         log.info("Update logo");
         General general = generalRepository.findAll().stream().findFirst().orElseThrow(() -> new RuntimeException("General instance not found"));
         try {
-            // TODO: fix the fucking problem her
             FileDataResponseDto logoResponseDto = mediaClient.uploadImageToFIleSystem(logo).getBody();
-            // TODO: Check if the logoResponseDto is null
             general.setLogo(logoResponseDto.getFilePath());
         } catch (IOException e) {
             throw new RuntimeException("Error while uploading image to the file system");
@@ -118,7 +116,6 @@ public class GeneralServiceImpl implements GeneralService {
         log.info("Update favicon");
         General general = generalRepository.findAll().stream().findFirst().orElseThrow(() -> new RuntimeException("General instance not found"));
         try {
-            // TODO: fix this shit
             FileDataResponseDto faviconResponseDto = mediaClient.uploadImageToFIleSystem(favicon).getBody();
             general.setFavicon(faviconResponseDto.getFilePath());
         } catch (IOException e) {

@@ -1,10 +1,8 @@
 package com.simplon.utilisateurs.dtos.request;
 
+import com.simplon.utilisateurs.model.enums.Banque;
 import com.simplon.utilisateurs.model.enums.TypeEntreprise;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.io.Serializable;
@@ -12,46 +10,51 @@ import java.io.Serializable;
 /**
  * DTO for {@link com.simplon.utilisateurs.model.entity.Client}
  */
-@Data
-@NoArgsConstructor
+@Value
 public class ClientRequestDto implements Serializable {
 
-    @NotEmpty(message = "nomComplet is required")
+    // Personal information
+    @NotBlank(message = "Nom complet is required")
     String nomComplet;
 
-    @Max(value = 10, message = "telephone should be 10 characters")
-    @Min(value = 10, message = "telephone should be 10 characters")
-    @NotEmpty(message = "telephone is required")
+    @Max(value = 10, message = "Telephone must be 10 digits")
+    @Min(value = 10, message = "Telephone must be 10 digits")
+    @NotBlank(message = "Telephone is required")
     String telephone;
 
     @Email(message = "Email should be valid")
     String email;
 
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
-            message = "Password should contain at least 8 characters, one uppercase, one lowercase, one digit, one special character and no whitespace")
-    @NotEmpty(message = "motDePasse is required")
-    String motDePasse;
+    @NotNull(message = "Banque is required")
+    Banque banque;
 
-    @NotEmpty(message = "adresse is required")
+    @NotBlank(message = "Adresse is required")
     String adresse;
 
-    @Max(value = 7, message = "cin should be 7 characters")
-    @Min(value = 7, message = "cin should be 7 characters")
-    @NotEmpty(message = "cin is required")
+    @Max(value = 7, message = "CIN must be 7 digits")
+    @NotBlank(message = "CIN is required")
     String cin;
 
-    @NotEmpty(message = "photoCinRecto is required")
+    @NotNull(message = "Ville ramassage is required")
+    Long villeRamassageId;
+
+    @NotNull(message = "Zone is required")
+    Long zoneId;
+
+    @NotBlank(message = "Compte bancaire is required")
+    String compteBancaire;
+
+    // Company information
+    @NotBlank(message = "Nom entreprise is required")
     String nomEntreprise;
 
-    @NotEmpty(message = "photoCinVerso is required")
+    // optional
     String website;
 
-    @NotNull(message = "typeEntreprise is required")
+    @NotNull(message = "Type entreprise is required")
     TypeEntreprise typeEntreprise;
 
-    @NotEmpty(message = "registreCommerce is required")
+    // optional
     String registreCommerce;
 
-    @NotNull(message = "villeId is required")
-    Long villeRamassageId;
 }

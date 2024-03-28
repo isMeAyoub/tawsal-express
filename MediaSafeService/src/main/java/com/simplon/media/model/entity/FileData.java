@@ -23,10 +23,13 @@ public class FileData {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fileData_sequence")
     @SequenceGenerator(name = "fileData_sequence", sequenceName = "fileData_sequence", allocationSize = 1)
     private Long filaDataId;
+
     @Column(name = "fileName", nullable = false)
     private String fileName;
+
     @Column(name = "fileType", nullable = false)
     private String fileType;
+
     @Column(name = "filePath", nullable = false)
     private String filePath;
 }

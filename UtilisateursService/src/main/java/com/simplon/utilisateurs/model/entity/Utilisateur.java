@@ -26,16 +26,16 @@ public abstract class Utilisateur extends Auditable<String> {
     @SequenceGenerator(name = "utilisateur_id_seq", sequenceName = "utilisateur_id_seq", allocationSize = 1)
     private Long utilisateurId;
 
-    @Column(name = "nom_complet", nullable = false)
+    @Column(name = "nom_complet", nullable = false ,unique = true)
     private String nomComplet;
 
     @Column(name = "photo_profile", nullable = false)
     private String photoProfile;
 
-    @Column(name = "telephone", nullable = false)
+    @Column(name = "telephone", nullable = false, unique = true)
     private String telephone;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false ,unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -45,7 +45,7 @@ public abstract class Utilisateur extends Auditable<String> {
     @Column(name = "adresse", nullable = false)
     private String adresse;
 
-    @Column(name = "cin", nullable = false)
+    @Column(name = "cin", nullable = false, unique = true)
     private String cin;
 
     @Column(name = "photo_cin_recto", nullable = false)

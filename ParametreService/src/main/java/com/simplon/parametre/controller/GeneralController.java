@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,8 +60,8 @@ public class GeneralController {
      * @return void
      * @Author Ayoub Ait Si Ahmad
      */
-    @PatchMapping("/logo")
-    public ResponseEntity<Void> updateLogo(@RequestParam("image") MultipartFile logo) {
+    @PatchMapping(value = "/logo")
+    public ResponseEntity<Void> updateLogo(@RequestParam("logo") MultipartFile logo) {
         log.info("Update logo");
         generalService.updateLogo(logo);
         return ResponseEntity.ok().build();
@@ -73,7 +74,7 @@ public class GeneralController {
      * @return void
      * @Author Ayoub Ait Si Ahmad
      */
-    @PatchMapping("/favicon")
+    @PatchMapping(value = "/favicon")
     public ResponseEntity<Void> updateFavicon(@RequestParam("favicon") MultipartFile favicon) {
         log.info("Update favicon");
         generalService.updateFavicon(favicon);
