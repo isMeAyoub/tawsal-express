@@ -37,22 +37,23 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-spring-boot-starter -->
+    </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-spring-boot-starter
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>
             <version>22.0.3</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-servlet-filter-adapter -->
+    </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-servlet-filter-adapter
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-servlet-filter-adapter</artifactId>
             <version>22.0.3</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

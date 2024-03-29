@@ -52,6 +52,12 @@ public class GeneralServiceImpl implements GeneralService {
         }
     }
 
+    /**
+     * GetGeneralInstance method is used to get the general information.
+     * It returns a GeneralResponseDto object.
+     *
+     * @return GeneralResponseDto
+     */
     @Override
     public GeneralResponseDto getGeneralInstance() {
         log.info("Get general information");
@@ -65,6 +71,14 @@ public class GeneralServiceImpl implements GeneralService {
         return generalResponseDto;
     }
 
+    /**
+     * UpdateGeneral method is used to update the general information.
+     * It takes a GeneralRequestDto object as a parameter and returns a GeneralResponseDto object.
+     *
+     * @param generalRequestDto the new general information
+     *                          (type GeneralRequestDto)
+     * @return GeneralResponseDto
+     */
     @Override
     public GeneralResponseDto updateGeneral(GeneralRequestDto generalRequestDto) {
         log.info("Update general information");
@@ -107,7 +121,7 @@ public class GeneralServiceImpl implements GeneralService {
      * UpdateFavicon method is used to update the logo of the general information.
      * It takes a MultipartFile object as a parameter and returns a GeneralResponseDto object.
      *
-     * @param logo the new favicon image
+     * @param favicon the new favicon image
      *             (type MultipartFile)
      * @return void
      */

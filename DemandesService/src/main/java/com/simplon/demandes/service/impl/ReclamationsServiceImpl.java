@@ -10,6 +10,4 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReclamationsServiceImpl {
     private final ReclamationsRepository reclamationsRepository;
-
-    public
 }

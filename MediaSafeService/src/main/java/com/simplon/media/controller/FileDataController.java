@@ -31,7 +31,13 @@ public class FileDataController {
 
     private final FileDataService fileDataService;
 
-
+    /**
+     * This method is used to upload an image to the file system.
+     *
+     * @param file the image to upload
+     * @return the file data response dto
+     * @throws IOException if an error occurs during the upload
+     */
     @PostMapping
     public ResponseEntity<FileDataResponseDto> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException {
         log.info("file upload controller");
@@ -40,6 +46,13 @@ public class FileDataController {
         return new ResponseEntity<>(uploadImage, HttpStatus.OK);
     }
 
+    /**
+     * This method is used to download an image from the file system.
+     *
+     * @param fileId the id of the file to download
+     * @return the image data
+     * @throws IOException if an error occurs during the download
+     */
     @GetMapping("/{fileId}")
     public ResponseEntity<byte[]> downloadImageFromFileSystem(@NotNull @PathVariable Long fileId) throws IOException {
         log.info("file download controller");

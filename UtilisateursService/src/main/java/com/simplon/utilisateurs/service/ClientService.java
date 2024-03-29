@@ -9,4 +9,16 @@ public interface ClientService {
                       MultipartFile photoCinRecto,
                       MultipartFile photoCinVerso,
                       MultipartFile photoRib);
+
+    void updateClient(Long clientId,
+                      ClientRequestDto clientRequestDto,
+                      MultipartFile photoProfile,
+                      MultipartFile photoCinRecto,
+                      MultipartFile photoCinVerso,
+                      MultipartFile photoRib);
+
+    void validateClient(Long clientId);
+    void invalidateClient(Long clientId);
+    void deleteClient(Long clientId);
+    // TODO: get client by id
 }

@@ -23,5 +23,32 @@ public class ClientServiceImpl implements ClientService {
                              MultipartFile photoCinVerso,
                              MultipartFile photoRib) {
         log.info("Creating client: {}", clientRequestDto);
+        // TODO: check if the client already exists
+        // TODO: save the photos using media service
+        // TODO: email verification
+        // TODO: add the client to the database
+        // TODO: add the client to keycloak
+        // TODO: send notification to the admin
     }
+
+    @Override
+    public void updateClient(Long clientId, ClientRequestDto clientRequestDto, MultipartFile photoProfile, MultipartFile photoCinRecto, MultipartFile photoCinVerso, MultipartFile photoRib) {
+
+    }
+
+    @Override
+    public void validateClient(Long clientId) {
+
+    }
+
+    @Override
+    public void invalidateClient(Long clientId) {
+
+    }
+
+    @Override
+    public void deleteClient(Long clientId) {
+
+    }
+
 }

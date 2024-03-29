@@ -7,6 +7,7 @@ import com.simplon.media.repository.FileDataRepository;
 import com.simplon.media.service.FileDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +29,9 @@ public class FileDataServiceImpl implements FileDataService {
     private final FileDataRepository fileDataRepository;
     private final FileDataMapper fileDataMapper;
 
-    private final String FOLDER_PATH = "C:\\Users\\SetupGame\\Desktop\\File Data\\";
+    @Value("${file.storage.path}")
+    private String FOLDER_PATH;
+
 
     public FileDataResponseDto uploadImageToFileSystem(MultipartFile file) throws IOException {
         log.info(" file upload service");
