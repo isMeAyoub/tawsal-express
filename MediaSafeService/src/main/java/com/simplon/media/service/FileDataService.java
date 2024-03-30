@@ -1,16 +1,12 @@
 package com.simplon.media.service;
 
-import com.simplon.media.dtos.response.FileDataResponseDto;
-import com.simplon.media.model.entity.FileData;
+import com.simplon.media.dtos.response.FileResponseDto;
+import com.simplon.media.model.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 /**
- * Service for {@link FileData}
+ * Service for {@link File}
  */
 public interface FileDataService {
-    FileDataResponseDto uploadImageToFileSystem(MultipartFile file) throws IOException;
-
-    byte[] downloadImageFromFileSystem(Long fileId) throws IOException;
+    FileResponseDto uploadImageToFirebase(MultipartFile multipartFile);
 }

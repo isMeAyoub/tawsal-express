@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "tawsal-express",
+  "private_key_id": "44de90b9b16d25b1ab4ffb3e873afd96c1bcd261",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCgN7KbaXSL35Md\ntziRQnbrx0MjTE2B7iWiWGi/x9bIFmP+b0SNoPpUYfrYMeHkYDLMzR7o8n+ni5O5\n5jTplAtW8DiP8JSFbIoEqFueavXEzyX/zARTpFPowZ8zM1f6LXTmUQZRC71/cjjH\nf+R87/fazgK8ITyQfJxWh6OGldcIBjsO/mv55u6ianrUcCcB1XvkxiDm6u2PP1LU\n9KCsf8100u89UEyvIbC8XLuBNLv7ScqgHyj2ykkWtuRwRt3h165p0H7Pf9JocHBj\nHA4lQCxpNSL9M7/RipUjMh8LqsDzmSB7WIP562xbZBnmtFu74H5/bVWhThgeoI9x\nFv3SUzzHAgMBAAECggEAETDowTQ3hSqgJngaYbu39uSSl58AUgizkQ/bbXiL2zxL\nzmkx+eBj+9nniHsRued4i/EWd/hNKjUXzMKeutFfxhxQdWFjDk3vIUDPU9g2Nr/j\nW+cQL8laF4dvBZdkwTtPZ8cZ3mhcFOi0nvNiGOXGunuQX49RaE92lvJG4ZICWKHm\n9GQlvtCT3kizIP7Q1rsYZZt67hs5srf3l4Pwnu8Lsnlf/XGQjwz6BmhsQhaZRPty\nao4neCe0a9/FvwqaKubOkcD9q/ukMurrKNnGEVTIQN66rCKrol9l9b1y2qFQFdI+\n3yML4GRnvZnPv8FBFHD5qWnQXt0SjikNMR3Pc4vOgQKBgQDYzmZ/y0wY2lE4tYiq\nTPALr1+MkaSK245Ondm6T0b8Ahn7syx4mTAbe0JRZDSIYCMAbMrAMVrfjWlW2UAB\nMZzztT44CW8KkxDa8Z2vPyB8AqNDPoxj/J77Gf1GCw7mktzM6k+p4Na2eEIUFXfv\n0z3vPt385oOk0j3nry14lF9mbwKBgQC9LmxzNafX3JxDznOBvzzXkr9jWNZD58NH\nzUGhPFLvGWsZvC04ioeIUQhCtFdzjGr2QB+fAODUSoidpr23gCOq9T4hBcyfsd/M\npEfyvF9ptv02bhO1WZ2JihoILi6KBvLooZDAV/p+eoVum1HxYWy/zWTCt2OXS2Fe\nSTrBerP7KQKBgEBet6wFrihK2Yaez17QzQyLGzFfJJ1dppjM4RIh649zCEfk4LVF\ntjTSmdQUjkxXTs0Xf/MkNDjfgYEZq5kvI8xv6XM1ydQ36e83gXvAoGJxXgvfDEu7\ne3BOPRaIvfnTbN8iSljDurweZHAWF7AK5f6cichGoJtVGLArILMGSnTdAoGAFQ7Y\n1Y4wa6/L2SRe6R9fZ2OXWDioSRDARPrNBmSPmrvKlyfCJNwOsBbNA5fNcDg+I8EJ\nhAp1/Et7n4jS710dG0eHLefWWiRTlBTpSVS8jijnUKq6GOKrzYaI1UZGueiCG3D4\niuCAKpn6xlAVs/ezQjpbr+z38fxbD0K5fpXo+NkCgYBuD41ibkikbInbEravwIpF\nHftUqoQ4nwRM8aAqSXBLHZPCkSJiARktl+L/smuL1rX6h8IRaSf1yoVyFOxYUStG\nJcEr+7OUw6hRtl6DjVf+rVSzfi7lr4moQ8sJmo8tIix40TQ7NBm8fVhsWfjukehM\nrMTgssqVPbUsv2jAiWYAJA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fi1ne@tawsal-express.iam.gserviceaccount.com",
+  "client_id": "117946185860889529531",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fi1ne%40tawsal-express.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

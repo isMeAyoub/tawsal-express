@@ -7,3 +7,7 @@ spring:
     config:
       uri: http://localhost:8888
 
+firebase:
+  bucket: "tawsal-express.appspot.com"
+  url: "https://firebasestorage.googleapis.com/v0/b/tawsal-express.appspot.com/o/%s?alt=media"
+  credentials: "firebase.json"

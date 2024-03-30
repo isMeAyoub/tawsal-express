@@ -25,8 +25,7 @@ public interface MediaClient {
      *
      * @param file
      * @return FileDataResponseDto
-     * @throws IOException
      */
     @PostMapping(value = "/api/v1/media/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<FileDataResponseDto> uploadImageToFIleSystem(@RequestPart("image") MultipartFile file) throws IOException;
+    ResponseEntity<FileResponseDto> uploadImageToFirebase(@RequestPart("image") MultipartFile file);
 }

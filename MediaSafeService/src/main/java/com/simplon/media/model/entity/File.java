@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "fileData")
-public class FileData {
+@Table(name = "file")
+public class File {
     @Id
-    @Column(name = "fileDataId")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fileData_sequence")
-    @SequenceGenerator(name = "fileData_sequence", sequenceName = "fileData_sequence", allocationSize = 1)
-    private Long filaDataId;
+    @Column(name = "fileId")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_sequence")
+    @SequenceGenerator(name = "file_sequence", sequenceName = "file_sequence", allocationSize = 1)
+    private Long fileId;
 
     @Column(name = "fileName", nullable = false)
     private String fileName;

@@ -1,9 +1,12 @@
 package com.simplon.media.service.impl;
 
-import com.simplon.media.dtos.response.FileDataResponseDto;
-import com.simplon.media.mapper.FileDataMapper;
-import com.simplon.media.model.entity.FileData;
-import com.simplon.media.repository.FileDataRepository;
+import com.google.auth.Credentials;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.*;
+import com.simplon.media.dtos.response.FileResponseDto;
+import com.simplon.media.mapper.FileMapper;
+import com.simplon.media.model.entity.File;
+import com.simplon.media.repository.FileRepository;
 import com.simplon.media.service.FileDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,14 +14,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Optional;
+import java.util.UUID;
 
 /**
- * This service is used to manage the file data.
- * It allows to upload and download files.
+ * This Service is used to manage the file data.
  *
  * @Author: Ayou Ait Si Ahmad
  */
@@ -26,36 +31,94 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FileDataServiceImpl implements FileDataService {
-    private final FileDataRepository fileDataRepository;
-    private final FileDataMapper fileDataMapper;
+    private final FileRepository fileRepository;
+    private final FileMapper fileMapper;
 
-    @Value("${file.storage.path}")
-    private String FOLDER_PATH;
+    @Value("${firebase.bucket}")
+    private String BUCKET_NAME;
 
+    @Value("${firebase.url}")
+    private String FIREBASE_URL;
 
-    public FileDataResponseDto uploadImageToFileSystem(MultipartFile file) throws IOException {
-        log.info(" file upload service");
-        String filePath = FOLDER_PATH + file.getOriginalFilename();
-        log.info(" file path : " + filePath);
-        FileData fileData = fileDataRepository.save(FileData.builder().fileName(file.getOriginalFilename()).fileType(file.getContentType()).filePath(filePath).build());
-        log.debug("file data : " + fileData);
-        file.transferTo(new File(filePath));
+    @Value("${firebase.credentials}")
+    private String FIREBASE_CREDENTIALS;
 
-        if (fileData != null) {
-            log.info("file uploaded successfully");
-            return fileDataMapper.toDto(fileData);
+    /**
+     * This method is used to upload an image to the firebase storage
+     *
+     * @param multipartFile
+     * @return FileResponseDto
+     */
+    @Override
+    public FileResponseDto uploadImageToFirebase(MultipartFile multipartFile) {
+        try {
+            String fileName = multipartFile.getOriginalFilename();
+            fileName = UUID.randomUUID().toString().concat(this.getExtension(fileName));
+
+            java.io.File file = this.convertToFile(multipartFile, fileName);
+            String URL = this.uploadFile(multipartFile, file, fileName);
+            file.delete();
+
+            // Build the entity
+            File fileEntity = File.builder()
+                    .fileName(fileName)
+                    .fileType(multipartFile.getContentType())
+                    .filePath(URL)
+                    .build();
+
+            // Save the entity using the repository
+            File savedFile = fileRepository.save(fileEntity);
+
+            // Map the saved entity to FileResponseDto and return it
+            return fileMapper.toDto(savedFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Image couldn't upload, Something went wrong", e);
         }
-        return null;
     }
 
-    public byte[] downloadImageFromFileSystem(Long fileId) throws IOException {
-        log.info(" file download service");
-        Optional<FileData> fileData = fileDataRepository.findByFilaDataId(fileId);
-        log.debug("file data : " + fileData);
-        String filePath = fileData.get().getFilePath();
-        log.debug("file path : " + filePath);
-        byte[] images = Files.readAllBytes(new File(filePath).toPath());
-        log.info("file downloaded successfully");
-        return images;
+    /**
+     * This method is used to upload a file to the firebase storage
+     * @param multipartFile
+     * @param file
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
+    private String uploadFile(MultipartFile multipartFile, java.io.File file, String fileName) throws IOException {
+        BlobId blobId = BlobId.of(BUCKET_NAME, fileName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(multipartFile.getContentType()).build();
+        InputStream inputStream = FileDataServiceImpl.class.getClassLoader().getResourceAsStream(FIREBASE_CREDENTIALS);
+        Credentials credentials = GoogleCredentials.fromStream(inputStream);
+        Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+        storage.create(blobInfo, Files.readAllBytes(file.toPath()));
+
+        //  return the URL of the uploaded file in the firebase storage
+        return String.format(FIREBASE_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * This method is used to convert a MultipartFile to a File
+     * @param multipartFile
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
+    private java.io.File convertToFile(MultipartFile multipartFile, String fileName) throws IOException {
+        java.io.File tempFile = new java.io.File(fileName);
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            fos.write(multipartFile.getBytes());
+            fos.close();
+        }
+        return tempFile;
+    }
+
+    /**
+     * This method is used to get the extension of a file
+     * @param fileName
+     * @return
+     */
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
     }
 }

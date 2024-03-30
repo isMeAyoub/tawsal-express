@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-
 @Data
 @NoArgsConstructor
-public class FileDataResponseDto implements Serializable {
+public class FileResponseDto implements Serializable {
     @NotNull(message = "fileDataId is required")
-    Long filaDataId;
+    Long fileId;
     @NotEmpty(message = "fileName is required")
     String fileName;
     @NotEmpty(message = "fileType is required")
