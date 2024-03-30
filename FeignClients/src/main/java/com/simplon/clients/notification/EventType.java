@@ -8,4 +8,5 @@ package com.simplon.clients.notification;
 public enum EventType {
     NOUVEAU_UTILISATEUR,
     NOUVELLE_RECLAMATION,
+    NOUVELLE_DEMANDE_RAMASSAGE,
 }

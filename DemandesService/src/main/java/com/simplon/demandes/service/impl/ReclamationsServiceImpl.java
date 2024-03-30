@@ -11,7 +11,6 @@ import com.simplon.demandes.repository.ReclamationsRepository;
 import com.simplon.demandes.service.ReclamationsService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

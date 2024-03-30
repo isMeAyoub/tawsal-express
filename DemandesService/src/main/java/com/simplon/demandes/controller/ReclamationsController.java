@@ -11,12 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/demandes/reclamations")
+@RequestMapping("/api/v1/demandes/reclamation")
 public class ReclamationsController {
     private final ReclamationsService reclamationsService;
 

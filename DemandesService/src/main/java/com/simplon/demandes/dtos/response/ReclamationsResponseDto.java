@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class ReclamationsResponseDto implements Serializable {
-    @NotNull(message = "Created Date cannot be null")
-    LocalDateTime createdDate;
 
     @NotNull(message = "Updated Date cannot be null")
     Long reclamationId;
@@ -31,7 +29,11 @@ public class ReclamationsResponseDto implements Serializable {
 
     @NotNull(message = "Etat cannot be null")
     ReclamationsEtat etat;
-    
+
     @NotNull(message = "Type cannot be null")
     ReclamationsType type;
+
+    @NotNull(message = "Created Date cannot be null")
+    LocalDateTime createdDate;
+
 }

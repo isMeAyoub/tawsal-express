@@ -1,7 +1,8 @@
 package com.simplon.demandes.model.entity;
 
 import com.simplon.demandes.audit.Auditable;
-import com.simplon.demandes.model.enums.BonLivraisonStatut;
+import com.simplon.demandes.model.enums.RamassageEtat;
+import com.simplon.demandes.model.enums.RamassageType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,9 +11,6 @@ import lombok.NoArgsConstructor;
 
 /**
  * This class represents a DemandeRamassage entity.
- * Should be used in the DemandeRamassage {@link com.simplon.demandes.model.entity.DemandeRamassage} entity.
- * Shoul i make a attention to this attribute: {@link com.simplon.demandes.model.entity.DemandeRamassage.telephone}
- * and {@link com.simplon.demandes.model.entity.DemandeRamassage.adresse}
  *
  * @Author: Ayoub Ait Si Ahmad
  */
@@ -39,9 +37,14 @@ public class DemandeRamassage extends Auditable<String> {
     @Column(name = "telephone")
     private String telephone;
 
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "statut", nullable = false)
-    private BonLivraisonStatut statut;
+    @Column(name = "ramassage_etat", nullable = false)
+    private RamassageEtat ramassageEtat;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ramassage_type", nullable = false)
+    private RamassageType ramassageType;
 
     // TODO: Add user_id relation
 }
