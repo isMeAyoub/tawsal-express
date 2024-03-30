@@ -2,6 +2,7 @@ package com.simplon.demandes.model.entity;
 
 import com.simplon.demandes.audit.Auditable;
 import com.simplon.demandes.model.enums.ReclamationsEtat;
+import com.simplon.demandes.model.enums.ReclamationsType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,9 @@ public class Reclamations extends Auditable<String> {
     @Column(name = "etat", nullable = false)
     private ReclamationsEtat etat;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReclamationsType type;
+
+    // TODO: Add user_id relation
 }

@@ -1,5 +1,6 @@
 package com.simplon.demandes.dtos.request;
 
+import com.simplon.demandes.model.enums.ReclamationsType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -19,4 +20,7 @@ public class ReclamationsRequestDto implements Serializable {
 
     @NotBlank(message = "Message cannot be blank")
     String message;
+
+    @NotNull(message = "Type cannot be null")
+    ReclamationsType type;
 }

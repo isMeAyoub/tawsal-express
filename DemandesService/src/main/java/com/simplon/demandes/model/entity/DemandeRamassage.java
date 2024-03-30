@@ -42,4 +42,6 @@ public class DemandeRamassage extends Auditable<String> {
     @Enumerated(EnumType.STRING)
     @Column(name = "statut", nullable = false)
     private BonLivraisonStatut statut;
+
+    // TODO: Add user_id relation
 }
