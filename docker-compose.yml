@@ -1,6 +1,37 @@
 version: '3.1'
 
 services:
+  postgres:
+    container_name: postgres-keycloak
+    image: postgres:16
+    environment:
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+      POSTGRES_DB: keycloak
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:22.0.2
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    command:
+      - start-dev
+    # I should add this when I want to import realm
+    #volumes:
+      #- ./keycloak/imports:/opt/jboss/keycloak/imports
+    depends_on:
+      - postgres
+
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3.13-management
@@ -147,3 +178,5 @@ volumes:
   utilisateurs-db:
   media-db:
   rabbitmq-data:
+  postgres_data:
+    driver: local

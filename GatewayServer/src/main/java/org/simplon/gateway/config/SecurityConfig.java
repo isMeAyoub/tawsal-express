@@ -1,48 +1,39 @@
 package org.simplon.gateway.config;
 
-import java.io.IOException;
-/**
- * import org.keycloak.adapters.authorization.integration.jakarta.ServletPolicyEnforcerFilter;
- * import org.keycloak.adapters.authorization.spi.ConfigurationResolver;
- * import org.keycloak.adapters.authorization.spi.HttpRequest;
- * import org.keycloak.representations.adapters.config.PolicyEnforcerConfig;
- * import org.keycloak.util.JsonSerialization;
- * import org.springframework.beans.factory.annotation.Value;
- * import org.springframework.context.annotation.Bean;
- * import org.springframework.context.annotation.Configuration;
- * import org.springframework.security.config.annotation.web.builders.HttpSecurity;
- * import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
- * import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
- * import org.springframework.security.config.http.SessionCreationPolicy;
- * import org.springframework.security.oauth2.jwt.JwtDecoder;
- * import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
- * import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
- * import org.springframework.security.web.SecurityFilterChain;
- *
- * @Configuration
- * @EnableWebSecurity public class SecurityConfig {
- * @Bean public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
- * http.csrf(t -> t.disable());
- * http.authorizeRequests().anyRequest().permitAll();
- * http.addFilterAfter(createPolicyEnforcerFilter(),
- * BearerTokenAuthenticationFilter.class);
- * http.sessionManagement(t -> t.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
- * return http.build();
- * }
- * <p>
- * private ServletPolicyEnforcerFilter createPolicyEnforcerFilter() {
- * return new ServletPolicyEnforcerFilter(new ConfigurationResolver() {
- * @Override public PolicyEnforcerConfig resolve(HttpRequest request) {
- * try {
- * return JsonSerialization.readValue(
- * getClass().getResourceAsStream("/policy-enforcer.json"),
- * PolicyEnforcerConfig.class);
- * } catch (IOException e) {
- * throw new RuntimeException(e);
- * }
- * }
- * });
- * }
- * <p>
- * }
- **/
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
+
+@Configuration
+@EnableWebFluxSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityWebFilterChain springSecurituFilterChain (ServerHttpSecurity serverHttpSecurity) {
+        serverHttpSecurity.authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/api/v1/parametre/**").hasRole("administrateur")
+                        .anyExchange().authenticated())
+                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
+                        .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
+        serverHttpSecurity.csrf(csrfSpec -> csrfSpec.disable());
+
+        return serverHttpSecurity.build();
+    }
+
+    private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
+        JwtAuthenticationConverter jwtAuthenticationConverter =
+                new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter
+                (new KeycloakRoleConverter());
+        return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
+    }
+
+}
