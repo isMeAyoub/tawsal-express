@@ -7,6 +7,15 @@ spring:
     config:
       uri: http://localhost:8888
 
+# This is for keycloak configuration
+keycloak:
+  realm: tawsal-express
+  auth-server-url: http://localhost:8080/auth
+  resource: tawsal-express
+  ssl-required: external
+  credentials:
+    secret: Y9Bx0rl5LiRSiaUkQQCKUwAXi6quBLl8
+
 error:
   handling:
     http-statuses:

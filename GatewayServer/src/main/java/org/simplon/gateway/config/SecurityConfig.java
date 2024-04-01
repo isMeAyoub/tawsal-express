@@ -19,7 +19,7 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurituFilterChain (ServerHttpSecurity serverHttpSecurity) {
         serverHttpSecurity.authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/api/v1/parametre/**").hasRole("administrateur")
+                        .pathMatchers("/api/v1/parametre/**").hasRole("ADMIN")
                         .anyExchange().authenticated())
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

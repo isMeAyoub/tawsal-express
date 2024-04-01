@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
+    Client findByNomCompletIgnoreCaseOrTelephoneIgnoreCaseOrCinIgnoreCaseOrEmailIgnoreCaseOrNomEntrepriseIgnoreCaseOrRegistreCommerceIgnoreCase(
+            String nomComplet, String telephone, String cin, String email, String nomEntreprise, String registreCommerce);
 }

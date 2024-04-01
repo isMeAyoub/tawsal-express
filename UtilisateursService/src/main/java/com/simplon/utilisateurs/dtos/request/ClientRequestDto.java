@@ -3,22 +3,25 @@ package com.simplon.utilisateurs.dtos.request;
 import com.simplon.utilisateurs.model.enums.Banque;
 import com.simplon.utilisateurs.model.enums.TypeEntreprise;
 import jakarta.validation.constraints.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 
 /**
  * DTO for {@link com.simplon.utilisateurs.model.entity.Client}
  */
-@Value
+@Data
+@NoArgsConstructor
 public class ClientRequestDto implements Serializable {
 
     // Personal information
     @NotBlank(message = "Nom complet is required")
     String nomComplet;
 
-    @Max(value = 10, message = "Telephone must be 10 digits")
-    @Min(value = 10, message = "Telephone must be 10 digits")
+    @Length(min = 10, max = 10, message = "Telephone must be 10 digits")
     @NotBlank(message = "Telephone is required")
     String telephone;
 
@@ -31,7 +34,7 @@ public class ClientRequestDto implements Serializable {
     @NotBlank(message = "Adresse is required")
     String adresse;
 
-    @Max(value = 7, message = "CIN must be 7 digits")
+    @Length(min = 8, max = 8, message = "CIN must be 8 digits")
     @NotBlank(message = "CIN is required")
     String cin;
 
