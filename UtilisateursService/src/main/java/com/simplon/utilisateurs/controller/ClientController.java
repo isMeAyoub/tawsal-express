@@ -23,14 +23,15 @@ public class ClientController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createClient(
-            @Valid @RequestBody ClientRequestDto clientRequestDto,
-            @RequestParam(value = "photoProfile") MultipartFile photoProfile,
-            @RequestParam(value = "photoCinRecto") MultipartFile photoCinRecto,
-            @RequestParam(value = "photoCinVerso") MultipartFile photoCinVerso,
-            @RequestParam(value = "photoRib") MultipartFile photoRib
+            @Valid @RequestPart("clientRequestDto") ClientRequestDto clientRequestDto,
+            @RequestPart(value = "photoProfile") MultipartFile photoProfile,
+            @RequestPart(value = "photoCinRecto") MultipartFile photoCinRecto,
+            @RequestPart(value = "photoCinVerso") MultipartFile photoCinVerso,
+            @RequestPart(value = "photoRib") MultipartFile photoRib
     ) {
         log.info("Creating client: {}", clientRequestDto);
         clientService.createClient(clientRequestDto, photoProfile, photoCinRecto, photoCinVerso, photoRib);
         log.info("Client created successfully");
     }
+
 }

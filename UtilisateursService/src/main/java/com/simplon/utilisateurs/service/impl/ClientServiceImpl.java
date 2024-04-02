@@ -48,13 +48,14 @@ public class ClientServiceImpl implements ClientService {
             throw new EntityExistsException("Client already exists with the same information");
         }
 
-        // TODO: save the fucking photos in media service
+        // TODO: save photos in media service
         FileResponseDto photoProfileSaved = mediaClient.uploadImageToFirebase(photoProfile).getBody();
         FileResponseDto photoCinRectoSaved = mediaClient.uploadImageToFirebase(photoCinRecto).getBody();
         FileResponseDto photoCinVersoSaved = mediaClient.uploadImageToFirebase(photoCinVerso).getBody();
         FileResponseDto photoRibSaved = mediaClient.uploadImageToFirebase(photoRib).getBody();
         // TODO: save the photos using media service
         Client clientBuild = Client.builder()
+                .nomComplet(clientRequestDto.getNomComplet())
                 .nomEntreprise(clientRequestDto.getNomEntreprise())
                 .photoProfile(photoProfileSaved.getFilePath())
                 .telephone(clientRequestDto.getTelephone())
