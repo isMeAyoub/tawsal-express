@@ -3,10 +3,12 @@ package com.simplon.utilisateurs.service.impl;
 import com.simplon.clients.media.FileResponseDto;
 import com.simplon.clients.media.MediaClient;
 import com.simplon.utilisateurs.dtos.request.ClientRequestDto;
+import com.simplon.utilisateurs.dtos.request.UserKeycloakRequestDto;
 import com.simplon.utilisateurs.mapper.ClientMapper;
 import com.simplon.utilisateurs.model.entity.Client;
 import com.simplon.utilisateurs.repository.ClientRepository;
 import com.simplon.utilisateurs.service.ClientService;
+import com.simplon.utilisateurs.service.KeycloakService;
 import jakarta.persistence.EntityExistsException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
     private final MediaClient mediaClient;
+    private final KeycloakService keycloakService;
 
     @Override
     public void createClient(ClientRequestDto clientRequestDto,
@@ -35,8 +38,9 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientMapper.toEntity(clientRequestDto);
         // TODO: check if the client already exists
         try {
-            Client searchClient = clientRepository.findByNomCompletIgnoreCaseOrTelephoneIgnoreCaseOrCinIgnoreCaseOrEmailIgnoreCaseOrNomEntrepriseIgnoreCaseOrRegistreCommerceIgnoreCase(
-                    client.getNomComplet(),
+            Client searchClient = clientRepository.findByNomIgnoreCaseOrPrenomIgnoreCaseOrTelephoneIgnoreCaseOrCinIgnoreCaseOrEmailIgnoreCaseOrNomEntrepriseIgnoreCaseOrRegistreCommerceIgnoreCase(
+                    client.getNom(),
+                    client.getPrenom(),
                     client.getTelephone(),
                     client.getCin(),
                     client.getEmail(),
@@ -47,6 +51,16 @@ public class ClientServiceImpl implements ClientService {
             log.error("Client already exists: {}", clientRequestDto);
             throw new EntityExistsException("Client already exists with the same information");
         }
+        // TODO: add the client to keycloak
+        UserKeycloakRequestDto userKeycloakRequestDto = UserKeycloakRequestDto.builder()
+                .username(clientRequestDto.getEmail())
+                .firstName(clientRequestDto.getNom())
+                .lastName(clientRequestDto.getPrenom())
+                .email(clientRequestDto.getEmail())
+                .password(clientRequestDto.getMotDePasse())
+                .build();
+
+        keycloakService.createUserInKeycloak(userKeycloakRequestDto);
 
         // TODO: save photos in media service
         FileResponseDto photoProfileSaved = mediaClient.uploadImageToFirebase(photoProfile).getBody();
@@ -55,8 +69,10 @@ public class ClientServiceImpl implements ClientService {
         FileResponseDto photoRibSaved = mediaClient.uploadImageToFirebase(photoRib).getBody();
         // TODO: save the photos using media service
         Client clientBuild = Client.builder()
-                .nomComplet(clientRequestDto.getNomComplet())
+                .nom(clientRequestDto.getNom())
+                .prenom(clientRequestDto.getPrenom())
                 .nomEntreprise(clientRequestDto.getNomEntreprise())
+                // TODO: add the roles
                 .photoProfile(photoProfileSaved.getFilePath())
                 .telephone(clientRequestDto.getTelephone())
                 .email(clientRequestDto.getEmail())
@@ -77,7 +93,6 @@ public class ClientServiceImpl implements ClientService {
         // TODO: email verification
         // TODO: add the client to the database
         clientRepository.save(clientBuild);
-        // TODO: add the client to keycloak
         // TODO: send notification to the admin
     }
 

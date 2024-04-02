@@ -12,9 +12,14 @@ keycloak:
   realm: tawsal-express
   auth-server-url: http://localhost:8080/auth
   resource: tawsal-express
-  ssl-required: external
+
+  roles:
+    admin: ADMIN
+    livreur: LIVREUR
+    client: CLIENT
   credentials:
-    secret: Y9Bx0rl5LiRSiaUkQQCKUwAXi6quBLl8
+    secret: b5fcP6AlTgVdYkMaATwY80rqUmpWrvll
+
 
 error:
   handling:

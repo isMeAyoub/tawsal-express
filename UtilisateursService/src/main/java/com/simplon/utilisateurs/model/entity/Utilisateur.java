@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Set;
+
 /**
  * This class is used only to define the common attributes of the different types of users in the application.
  *
@@ -28,8 +30,17 @@ public abstract class Utilisateur extends Auditable<String> {
     @SequenceGenerator(name = "utilisateur_id_seq", sequenceName = "utilisateur_id_seq", allocationSize = 1)
     private Long utilisateurId;
 
-    @Column(name = "nom_complet", nullable = false ,unique = true)
-    private String nomComplet;
+    @Column(name = "keycloak_id", nullable = false, unique = true)
+    private String keycloakId;
+
+    @Column(name = "prenom", nullable = false)
+    private String prenom;
+
+    @Column(name = "nom", nullable = false)
+    private String nom;
+
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @Column(name = "photo_profile", nullable = false)
     private String photoProfile;
@@ -37,7 +48,7 @@ public abstract class Utilisateur extends Auditable<String> {
     @Column(name = "telephone", nullable = false, unique = true)
     private String telephone;
 
-    @Column(name = "email", nullable = false ,unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)

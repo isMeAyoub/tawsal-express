@@ -18,8 +18,11 @@ import java.io.Serializable;
 public class ClientRequestDto implements Serializable {
 
     // Personal information
-    @NotBlank(message = "Nom complet is required")
-    String nomComplet;
+    @NotBlank(message = "Prenom is required")
+    String prenom;
+
+    @NotBlank(message = "Nom is required")
+    String nom;
 
     @Length(min = 10, max = 10, message = "Telephone must be 10 digits")
     @NotBlank(message = "Telephone is required")
@@ -27,6 +30,9 @@ public class ClientRequestDto implements Serializable {
 
     @Email(message = "Email should be valid")
     String email;
+
+    @NotBlank(message = "Mot de passe is required")
+    String motDePasse;
 
     @NotNull(message = "Banque is required")
     Banque banque;
