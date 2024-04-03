@@ -10,16 +10,16 @@ spring:
 # This is for keycloak configuration
 keycloak:
   realm: tawsal-express
-  auth-server-url: http://localhost:8080/auth
+  server-url: http://localhost:8080
   resource: tawsal-express
-
+  credentials:
+    secret: jkTUrcJ938GnvHM5XFA7WyAbA0D1ScMb
+  username: ayoub
+  password: ayoub
   roles:
     admin: ADMIN
     livreur: LIVREUR
     client: CLIENT
-  credentials:
-    secret: b5fcP6AlTgVdYkMaATwY80rqUmpWrvll
-
 
 error:
   handling:

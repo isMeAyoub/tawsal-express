@@ -33,11 +33,17 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Value("${keycloak.resource}")
     private String CLIENTID;
 
-    @Value("${keycloak.auth-server-url}")
-    private String AUTHURL;
+    @Value("${keycloak.server-url}")
+    private String SERVERURL;
 
     @Value("${keycloak.realm}")
     private String REALM;
+
+    @Value("${keycloak.username}")
+    private String USERNAME;
+
+    @Value("${keycloak.password}")
+    private String PASSWORD;
 
     @Value("${keycloak.roles.client}")
     private String ROlE_CLIENT;
@@ -45,11 +51,12 @@ public class KeycloakServiceImpl implements KeycloakService {
     public Keycloak getInstance() {
         if (keycloak == null) {
             keycloak = KeycloakBuilder.builder()
-                    .serverUrl(AUTHURL)
-                    .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                    .serverUrl(SERVERURL)
                     .realm(REALM)
+                    .grantType(OAuth2Constants.PASSWORD)
                     .clientId(CLIENTID)
-                    .clientSecret(SECRETKEY)
+                    .username(USERNAME)
+                    .password(PASSWORD)
                     .build();
         }
         return keycloak;
