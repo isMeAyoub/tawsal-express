@@ -72,4 +72,10 @@ public abstract class Utilisateur extends Auditable<String> {
 
     @Column(name = "photo_rib", nullable = false)
     private String photoRib;
+
+    @Column(name = "is_enable", nullable = false)
+    private Boolean isEnable;
+
+    @Column(name = "is_validate", nullable = false)
+    private Boolean isValidate;
 }

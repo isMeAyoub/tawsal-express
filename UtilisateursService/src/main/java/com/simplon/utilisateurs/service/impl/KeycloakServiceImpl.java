@@ -2,95 +2,139 @@ package com.simplon.utilisateurs.service.impl;
 
 import com.simplon.utilisateurs.dtos.request.UserKeycloakRequestDto;
 import com.simplon.utilisateurs.service.KeycloakService;
-import jakarta.ws.rs.NotFoundException;
+import com.simplon.utilisateurs.util.KeycloakUtil;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.OAuth2Constants;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KeycloakServiceImpl implements KeycloakService {
 
-    private Keycloak keycloak;
-
     @Value("${keycloak.credentials.secret}")
-    private String SECRETKEY;
+    private String clientSecret;
 
     @Value("${keycloak.resource}")
-    private String CLIENTID;
+    private String clientId;
 
     @Value("${keycloak.server-url}")
-    private String SERVERURL;
+    private String serverUrl;
 
     @Value("${keycloak.realm}")
-    private String REALM;
-
-    @Value("${keycloak.username}")
-    private String USERNAME;
-
-    @Value("${keycloak.password}")
-    private String PASSWORD;
+    private String realm;
 
     @Value("${keycloak.roles.client}")
-    private String ROlE_CLIENT;
+    private String clientRole;
 
-    public Keycloak getInstance() {
-        if (keycloak == null) {
-            keycloak = KeycloakBuilder.builder()
-                    .serverUrl(SERVERURL)
-                    .realm(REALM)
-                    .grantType(OAuth2Constants.PASSWORD)
-                    .clientId(CLIENTID)
-                    .username(USERNAME)
-                    .password(PASSWORD)
-                    .build();
+    private final KeycloakUtil keycloakUtil;
+
+    /**
+     * Create user in Keycloak with given user request
+     *
+     * @param userRequest
+     * @return user ID
+     */
+    @Override
+    public String createUserInKeycloak(UserKeycloakRequestDto userRequest) {
+        log.info("Creating user in Keycloak: {}", userRequest.getUsername());
+
+        UsersResource usersResource = keycloakUtil.getRealmResource().users();
+        UserRepresentation user = buildUserRepresentation(userRequest);
+
+        Response response = usersResource.create(user);
+        if (response.getStatus() != 201) {
+            log.error("Failed to create user in Keycloak");
+            throw new RuntimeException("Keycloak user creation failed");
         }
-        return keycloak;
+
+        String userId = CreatedResponseUtil.getCreatedId(response);
+        log.info("User created successfully in Keycloak with ID: {}", userId);
+        return userId;
     }
 
-    public RealmResource getRealmResource() {
-        Keycloak keycloakInstance = getInstance();
-        return keycloakInstance.realm(REALM);
+    /**
+     * Build user representation
+     *
+     * @param userRequest
+     * @return
+     */
+    private UserRepresentation buildUserRepresentation(UserKeycloakRequestDto userRequest) {
+        CredentialRepresentation passwordCredential = new CredentialRepresentation();
+        passwordCredential.setType(CredentialRepresentation.PASSWORD);
+        passwordCredential.setValue(userRequest.getPassword());
+        passwordCredential.setTemporary(false);
+
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(userRequest.getUsername());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getEmail());
+        user.setCredentials(Arrays.asList(passwordCredential));
+        user.setRealmRoles(Arrays.asList(clientRole));
+
+        user.setEnabled(false);
+        user.setEmailVerified(false);
+
+        return user;
     }
 
     @Override
-    public void createUserInKeycloak(UserKeycloakRequestDto userKeycloakRequestDto) {
-        RealmResource realmResource = getRealmResource();
-        UsersResource usersResource = realmResource.users();
+    public void deleteUserInKeycloak(String userId) {
+        log.info("Deleting user in Keycloak: {}", userId);
 
-        // Create user representation
-        UserRepresentation user = new UserRepresentation();
-        user.setUsername(userKeycloakRequestDto.getUsername());
-        user.setFirstName(userKeycloakRequestDto.getFirstName());
-        user.setLastName(userKeycloakRequestDto.getLastName());
-        user.setEmail(userKeycloakRequestDto.getEmail());
-        user.setEmailVerified(false);
+        UsersResource usersResource = keycloakUtil.getRealmResource().users();
+        Response response = usersResource.delete(userId);
+
+        if (response.getStatus() != 204) {
+            log.error("Failed to delete user in Keycloak");
+            throw new RuntimeException("Keycloak user deletion failed");
+        }
+
+        log.info("User deleted successfully in Keycloak with ID: {}", userId);
+    }
+
+    @Override
+    public void validateUserInKeycloak(String userId) {
+        log.info("Validating user in Keycloak: {}", userId);
+
+        UsersResource usersResource = keycloakUtil.getRealmResource().users();
+        UserRepresentation user = usersResource.get(userId).toRepresentation();
+        user.setEnabled(true);
+
+        try {
+            usersResource.get(userId).update(user);
+            log.info("User validated successfully in Keycloak with ID: {}", userId);
+        } catch (Exception e) {
+            log.error("Failed to validate user in Keycloak", e);
+            throw new RuntimeException("Keycloak user validation failed", e);
+        }
+    }
+
+    @Override
+    public void suspendUserInKeycloak(String userId) {
+        log.info("Suspending user in Keycloak: {}", userId);
+
+        UsersResource usersResource = keycloakUtil.getRealmResource().users();
+        UserRepresentation user = usersResource.get(userId).toRepresentation();
         user.setEnabled(false);
 
-        // Create password credential
-        CredentialRepresentation passwordCred = new CredentialRepresentation();
-        passwordCred.setTemporary(false);
-        passwordCred.setType(CredentialRepresentation.PASSWORD);
-        passwordCred.setValue(userKeycloakRequestDto.getPassword());
-        user.setCredentials(Arrays.asList(passwordCred));
-
-        // Assign role to user
-        user.setRealmRoles(Arrays.asList(ROlE_CLIENT));
-
-       usersResource.create(user);
+        try {
+            usersResource.get(userId).update(user);
+            log.info("User suspended successfully in Keycloak with ID: {}", userId);
+        } catch (Exception e) {
+            log.error("Failed to suspend user in Keycloak", e);
+            throw new RuntimeException("Keycloak user suspension failed", e);
+        }
     }
+
+
 }

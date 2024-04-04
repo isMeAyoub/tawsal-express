@@ -45,5 +45,7 @@ public class Client extends Utilisateur {
 
     @Column(name = "zone_id", nullable = false)
     private Long zoneId;
+
+
     // TODO: should make relation with colis, reclamations , demandesRamassage
 }

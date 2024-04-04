@@ -13,9 +13,8 @@ keycloak:
   server-url: http://localhost:8080
   resource: tawsal-express
   credentials:
-    secret: jkTUrcJ938GnvHM5XFA7WyAbA0D1ScMb
-  username: ayoub
-  password: ayoub
+    secret: b5fcP6AlTgVdYkMaATwY80rqUmpWrvll
+  # This is for the roles that we have in the keycloak
   roles:
     admin: ADMIN
     livreur: LIVREUR

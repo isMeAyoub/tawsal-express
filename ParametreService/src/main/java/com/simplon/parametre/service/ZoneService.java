@@ -1,6 +1,7 @@
 package com.simplon.parametre.service;
 
 import com.simplon.parametre.dtos.request.ZoneRequestDto;
+import com.simplon.parametre.dtos.response.ZoneClientResponseDto;
 import com.simplon.parametre.dtos.response.ZoneResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public interface ZoneService {
     ZoneResponseDto updateZone(Long zoneId, ZoneRequestDto zoneRequestDto);
 
     ZoneResponseDto getZone(Long zoneId);
+    ZoneClientResponseDto getZoneToClient(Long zoneId);
 
     void deleteZone(Long zoneId);
 

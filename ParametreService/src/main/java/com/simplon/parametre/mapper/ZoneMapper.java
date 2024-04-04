@@ -1,12 +1,13 @@
 package com.simplon.parametre.mapper;
 
 import com.simplon.parametre.dtos.request.ZoneRequestDto;
+import com.simplon.parametre.dtos.response.ZoneClientResponseDto;
 import com.simplon.parametre.dtos.response.ZoneResponseDto;
 import com.simplon.parametre.model.entity.Zone;
 import org.mapstruct.*;
 
 /**
- * Mapper for {@link com.simplon.parametre.model.entity.Zone}
+ * Mapper for {@link Zone}
  * Contains the methods to convert the data
  */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
@@ -29,4 +30,11 @@ public interface ZoneMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Zone partialUpdate(ZoneResponseDto zoneResponseDto, @MappingTarget Zone zone);
+
+    Zone toEntity(ZoneClientResponseDto zoneClientResponseDto);
+
+    ZoneClientResponseDto toDto2(Zone zone);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Zone partialUpdate(ZoneClientResponseDto zoneClientResponseDto, @MappingTarget Zone zone);
 }

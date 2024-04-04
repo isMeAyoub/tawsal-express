@@ -1,6 +1,7 @@
 package com.simplon.parametre.controller;
 
 import com.simplon.parametre.dtos.request.ZoneRequestDto;
+import com.simplon.parametre.dtos.response.ZoneClientResponseDto;
 import com.simplon.parametre.dtos.response.ZoneResponseDto;
 import com.simplon.parametre.service.ZoneService;
 import jakarta.validation.Valid;
@@ -43,6 +44,14 @@ public class ZoneController {
         ZoneResponseDto zoneResponseDto = zoneService.getZone(zoneId);
         log.info("Zone retrieved successfully: {}", zoneResponseDto);
         return ResponseEntity.ok(zoneResponseDto);
+    }
+
+    @GetMapping("/client/{zoneId}")
+    ResponseEntity<ZoneClientResponseDto> getZoneToClient(@NotNull @PathVariable Long zoneId) {
+        log.info("Request received to get Zone with id: {}", zoneId);
+        ZoneClientResponseDto zoneClientResponseDto = zoneService.getZoneToClient(zoneId);
+        log.info("Zone retrieved successfully: {}", zoneClientResponseDto);
+        return ResponseEntity.ok(zoneClientResponseDto);
     }
 
     @GetMapping

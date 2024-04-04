@@ -1,6 +1,7 @@
 package com.simplon.utilisateurs.service;
 
 import com.simplon.utilisateurs.dtos.request.ClientRequestDto;
+import com.simplon.utilisateurs.dtos.response.ClientResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ClientService {
@@ -18,7 +19,12 @@ public interface ClientService {
                       MultipartFile photoRib);
 
     void validateClient(Long clientId);
+
     void invalidateClient(Long clientId);
+
     void deleteClient(Long clientId);
-    // TODO: get client by id
+
+    void suspendClient(Long clientId);
+
+    ClientResponseDto getClient(Long clientId);
 }

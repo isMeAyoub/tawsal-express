@@ -1,6 +1,7 @@
 package com.simplon.parametre.service.impl;
 
 import com.simplon.parametre.dtos.request.ZoneRequestDto;
+import com.simplon.parametre.dtos.response.ZoneClientResponseDto;
 import com.simplon.parametre.dtos.response.ZoneResponseDto;
 import com.simplon.parametre.mapper.ZoneMapper;
 import com.simplon.parametre.model.entity.Zone;
@@ -75,6 +76,15 @@ public class ZoneServiceImpl implements ZoneService {
         ZoneResponseDto zoneResponseDto = zoneMapper.toDto1(zone);
         log.info("Zone with id {} fetched successfully", zoneId);
         return zoneResponseDto;
+    }
+
+    @Override
+    public ZoneClientResponseDto getZoneToClient(Long zoneId) {
+        log.info("Fetching zone with id {}", zoneId);
+        Zone zone = findZoneById(zoneId);
+        ZoneClientResponseDto zoneClientResponseDto = zoneMapper.toDto2(zone);
+        log.info("Zone with id {} fetched successfully", zoneId);
+        return zoneClientResponseDto;
     }
 
     @Override
