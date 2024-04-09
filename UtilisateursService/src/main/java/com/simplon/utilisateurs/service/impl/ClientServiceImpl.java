@@ -22,8 +22,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 
 @Slf4j
 @Service
@@ -39,6 +44,29 @@ public class ClientServiceImpl implements ClientService {
 
     @Value("${keycloak.roles.client}")
     private String ROLE_CLIENT;
+
+    @Override
+    public Page<ClientResponseDto> getInvalidClients(Pageable pageable) {
+        log.info("Getting all not validated clients");
+        Pageable sortedPage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "lastModifiedDate"));
+        Page<Client> clients = clientRepository.findByIsValidateFalse(sortedPage);
+        log.debug("Clients found: {}", clients);
+        Page<ClientResponseDto> clientResponseDtos = clients.map(clientMapper::toDto1);
+        log.debug("Clients found: {}", clientResponseDtos);
+        return clientResponseDtos;
+    }
+
+    @Override
+    public Page<ClientResponseDto> getValidclients(Pageable pageable) {
+        log.info("Getting all validated clients");
+        Pageable sortedPage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "lastModifiedDate"));
+        Page<Client> clients = clientRepository.findByIsValidateTrue(sortedPage);
+        log.debug("Clients found: {}", clients);
+        Page<ClientResponseDto> clientResponseDtos = clients.map(clientMapper::toDto1);
+
+        log.debug("Clients found: {}", clientResponseDtos);
+        return clientResponseDtos;
+    }
 
 
     @Override
@@ -108,6 +136,7 @@ public class ClientServiceImpl implements ClientService {
 
         // Validate client in database
         client.setIsValidate(true);
+        client.setIsEnable(true);
         clientRepository.save(client);
         log.info("Client validated successfully");
     }
@@ -129,6 +158,27 @@ public class ClientServiceImpl implements ClientService {
 
         log.info("Client invalidated successfully");
     }
+
+    @Override
+    public void suspendClient(Long clientId) {
+        log.info("Suspending client by id: {}", clientId);
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> {
+            log.error("Client not found");
+            throw new EntityNotFoundException("Client not found with id: " + clientId);
+        });
+
+        // suspend only if validated is true
+        if (client.getIsValidate()) {
+            // Suspend user in Keycloak
+            keycloakService.suspendUserInKeycloak(client.getKeycloakId());
+
+            // Suspend client in database
+            client.setIsEnable(false);
+            clientRepository.save(client);
+            log.info("Client suspended successfully");
+        }
+    }
+
 
     @Override
     public void deleteClient(Long clientId) {
@@ -221,22 +271,4 @@ public class ClientServiceImpl implements ClientService {
         notificationClient.sendNotification(notification);
         log.info("New client notification sent successfully");
     }
-
-    @Override
-    public void suspendClient(Long clientId) {
-        log.info("Suspending client by id: {}", clientId);
-        Client client = clientRepository.findById(clientId).orElseThrow(() -> {
-            log.error("Client not found");
-            throw new EntityNotFoundException("Client not found with id: " + clientId);
-        });
-
-        // Suspend user in Keycloak
-        keycloakService.suspendUserInKeycloak(client.getKeycloakId());
-
-        // Suspend client in database
-        client.setIsEnable(false);
-        clientRepository.save(client);
-        log.info("Client suspended successfully");
-    }
-
 }

@@ -7,13 +7,18 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.CreatedResponseUtil;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.GroupRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -57,6 +62,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         }
 
         String userId = CreatedResponseUtil.getCreatedId(response);
+        assignRoleAndGroupToUser(userId);
         log.info("User created successfully in Keycloak with ID: {}", userId);
         return userId;
     }
@@ -79,12 +85,28 @@ public class KeycloakServiceImpl implements KeycloakService {
         user.setLastName(userRequest.getLastName());
         user.setEmail(userRequest.getEmail());
         user.setCredentials(Arrays.asList(passwordCredential));
-        user.setRealmRoles(Arrays.asList(clientRole));
 
         user.setEnabled(false);
         user.setEmailVerified(false);
 
         return user;
+    }
+
+    // assign role to user and delete all other roles
+    private void assignRoleAndGroupToUser(String userId) {
+        // Get UserResource
+        UserResource userResource = keycloakUtil.getRealmResource().users().get(userId);
+
+        // Get all realm-level roles of the user
+        List<RoleRepresentation> userRoles = userResource.roles().realmLevel().listAll();
+
+        // Remove all roles
+        userResource.roles().realmLevel().remove(userRoles);
+
+        // Add new role
+        RoleRepresentation roleRepresentationToAdd = keycloakUtil.getRealmResource().roles().get(clientRole).toRepresentation();
+        userResource.roles().realmLevel().add(Collections.singletonList(roleRepresentationToAdd));
+
     }
 
     @Override
