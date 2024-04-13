@@ -10,7 +10,7 @@ import java.io.Serializable;
  * DTO for {@link com.simplon.parametre.model.entity.VilleLivraison}
  */
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 public class VilleLivraisonRequestDto implements Serializable {
     @NotBlank(message = "reference is required")
     String reference;

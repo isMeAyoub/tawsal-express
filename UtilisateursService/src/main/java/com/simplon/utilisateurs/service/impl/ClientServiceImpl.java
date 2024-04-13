@@ -45,6 +45,12 @@ public class ClientServiceImpl implements ClientService {
     @Value("${keycloak.roles.client}")
     private String ROLE_CLIENT;
 
+    /**
+     * Get all invalid clients
+     *
+     * @param pageable
+     * @return Page<ClientResponseDto>
+     */
     @Override
     public Page<ClientResponseDto> getInvalidClients(Pageable pageable) {
         log.info("Getting all not validated clients");
@@ -56,6 +62,12 @@ public class ClientServiceImpl implements ClientService {
         return clientResponseDtos;
     }
 
+    /**
+     * Get all valid clients
+     *
+     * @param pageable
+     * @return Page<ClientResponseDto>
+     */
     @Override
     public Page<ClientResponseDto> getValidclients(Pageable pageable) {
         log.info("Getting all validated clients");
@@ -68,7 +80,15 @@ public class ClientServiceImpl implements ClientService {
         return clientResponseDtos;
     }
 
-
+    /***
+     * Create client with photos and send notification
+     *
+     * @param clientRequestDto
+     * @param photoProfile
+     * @param photoCinRecto
+     * @param photoCinVerso
+     * @param photoRib
+     */
     @Override
     public void createClient(ClientRequestDto clientRequestDto, MultipartFile photoProfile, MultipartFile photoCinRecto, MultipartFile photoCinVerso, MultipartFile photoRib) {
 
@@ -98,6 +118,12 @@ public class ClientServiceImpl implements ClientService {
         sendNewClientNotification(clientSaved);
     }
 
+    /**
+     * Get client by id
+     *
+     * @param clientId
+     * @return ClientResponseDto
+     */
     @Override
     public ClientResponseDto getClient(Long clientId) {
         log.info("Getting client by id: {}", clientId);
@@ -118,11 +144,17 @@ public class ClientServiceImpl implements ClientService {
         return clientResponseDto;
     }
 
+    // TODO: Implement updateClient method
     @Override
     public void updateClient(Long clientId, ClientRequestDto clientRequestDto, MultipartFile photoProfile, MultipartFile photoCinRecto, MultipartFile photoCinVerso, MultipartFile photoRib) {
 
     }
 
+    /**
+     * Validate client by id
+     *
+     * @param clientId
+     */
     @Override
     public void validateClient(Long clientId) {
         log.info("Validating client by id: {}", clientId);
@@ -141,6 +173,11 @@ public class ClientServiceImpl implements ClientService {
         log.info("Client validated successfully");
     }
 
+    /**
+     * Invalidate client by id if not validated
+     *
+     * @param clientId
+     */
     @Override
     public void invalidateClient(Long clientId) {
         log.info("Invalidating client by id: {}", clientId);
@@ -159,6 +196,11 @@ public class ClientServiceImpl implements ClientService {
         log.info("Client invalidated successfully");
     }
 
+    /**
+     * Suspend client by id if validated
+     *
+     * @param clientId
+     */
     @Override
     public void suspendClient(Long clientId) {
         log.info("Suspending client by id: {}", clientId);
@@ -179,7 +221,11 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
-
+    /**
+     * Delete client by id
+     *
+     * @param clientId
+     */
     @Override
     public void deleteClient(Long clientId) {
         log.info("Deleting client by id: {}", clientId);
@@ -196,18 +242,24 @@ public class ClientServiceImpl implements ClientService {
         log.info("Client deleted successfully");
     }
 
+    /**
+     * Check if client already exists
+     *
+     * @param clientRequestDto
+     */
     private void checkIfClientExists(ClientRequestDto clientRequestDto) {
-        clientRepository.findByTelephoneAndEmailAndCinAndNomEntrepriseAndRegistreCommerceAllIgnoreCase(
-                clientRequestDto.getTelephone(),
-                clientRequestDto.getEmail(),
-                clientRequestDto.getCin(),
-                clientRequestDto.getNomEntreprise(),
-                clientRequestDto.getRegistreCommerce()).ifPresent(c -> {
+        clientRepository.findByTelephoneAndEmailAndCinAndNomEntrepriseAndRegistreCommerceAllIgnoreCase(clientRequestDto.getTelephone(), clientRequestDto.getEmail(), clientRequestDto.getCin(), clientRequestDto.getNomEntreprise(), clientRequestDto.getRegistreCommerce()).ifPresent(c -> {
             log.error("Client already exists: {}", c);
             throw new EntityExistsException("Client already exists");
         });
     }
 
+    /**
+     * Validate zone and villeRamassage
+     *
+     * @param zoneId
+     * @param villeRamassageId
+     */
     private void validateZoneAndVilleRamassage(Long zoneId, Long villeRamassageId) {
         try {
             parametreClient.getZone(zoneId);
@@ -218,53 +270,49 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
+    /**
+     * Create user in Keycloak
+     *
+     * @param clientRequestDto
+     * @return String userKeycloakId
+     */
     private String createUserInKeycloak(ClientRequestDto clientRequestDto) {
-        UserKeycloakRequestDto userKeycloakRequestDto = UserKeycloakRequestDto.builder()
-                .username(clientRequestDto.getNomEntreprise())
-                .firstName(clientRequestDto.getNom())
-                .lastName(clientRequestDto.getPrenom())
-                .email(clientRequestDto.getEmail())
-                .password(clientRequestDto.getMotDePasse()).build();
+        UserKeycloakRequestDto userKeycloakRequestDto = UserKeycloakRequestDto.builder().username(clientRequestDto.getNomEntreprise()).firstName(clientRequestDto.getNom()).lastName(clientRequestDto.getPrenom()).email(clientRequestDto.getEmail()).password(clientRequestDto.getMotDePasse()).role(ROLE_CLIENT).enabled(false).build();
         return keycloakService.createUserInKeycloak(userKeycloakRequestDto);
     }
 
+    /**
+     * Upload photo to firebase
+     *
+     * @param photo
+     * @return FileResponseDto
+     */
     private FileResponseDto uploadPhoto(MultipartFile photo) {
         return mediaClient.uploadImageToFirebase(photo).getBody();
     }
 
-    private Client buildAndSaveClient(ClientRequestDto clientRequestDto,
-                                      String userKeycloakId,
-                                      FileResponseDto photoProfileSaved,
-                                      FileResponseDto photoCinRectoSaved,
-                                      FileResponseDto photoCinVersoSaved,
-                                      FileResponseDto photoRibSaved) {
+    /**
+     * Build and save client entity in the database
+     *
+     * @param clientRequestDto
+     * @param userKeycloakId
+     * @param photoProfileSaved
+     * @param photoCinRectoSaved
+     * @param photoCinVersoSaved
+     * @param photoRibSaved
+     * @return Client
+     */
+    private Client buildAndSaveClient(ClientRequestDto clientRequestDto, String userKeycloakId, FileResponseDto photoProfileSaved, FileResponseDto photoCinRectoSaved, FileResponseDto photoCinVersoSaved, FileResponseDto photoRibSaved) {
 
-        Client client = Client.builder()
-                .nom(clientRequestDto.getNom())
-                .prenom(clientRequestDto.getPrenom())
-                .nomEntreprise(clientRequestDto.getNomEntreprise())
-                .role(ROLE_CLIENT).keycloakId(userKeycloakId)
-                .photoProfile(photoProfileSaved.getFilePath())
-                .telephone(clientRequestDto.getTelephone())
-                .email(clientRequestDto.getEmail())
-                .banque(clientRequestDto.getBanque())
-                .adresse(clientRequestDto.getAdresse())
-                .cin(clientRequestDto.getCin())
-                .photoCinRecto(photoCinRectoSaved.getFilePath())
-                .photoCinVerso(photoCinVersoSaved.getFilePath())
-                .compteBancaire(clientRequestDto.getCompteBancaire())
-                .photoRib(photoRibSaved.getFilePath())
-                .registreCommerce(clientRequestDto.getRegistreCommerce())
-                .website(clientRequestDto.getWebsite())
-                .typeEntreprise(clientRequestDto.getTypeEntreprise())
-                .villeRamassageId(clientRequestDto.getVilleRamassageId())
-                .zoneId(clientRequestDto.getZoneId())
-                .isEnable(false)
-                .isValidate(false)
-                .build();
+        Client client = Client.builder().nom(clientRequestDto.getNom()).prenom(clientRequestDto.getPrenom()).nomEntreprise(clientRequestDto.getNomEntreprise()).role(ROLE_CLIENT).keycloakId(userKeycloakId).photoProfile(photoProfileSaved.getFilePath()).telephone(clientRequestDto.getTelephone()).email(clientRequestDto.getEmail()).banque(clientRequestDto.getBanque()).adresse(clientRequestDto.getAdresse()).cin(clientRequestDto.getCin()).photoCinRecto(photoCinRectoSaved.getFilePath()).photoCinVerso(photoCinVersoSaved.getFilePath()).compteBancaire(clientRequestDto.getCompteBancaire()).photoRib(photoRibSaved.getFilePath()).registreCommerce(clientRequestDto.getRegistreCommerce()).website(clientRequestDto.getWebsite()).typeEntreprise(clientRequestDto.getTypeEntreprise()).villeRamassageId(clientRequestDto.getVilleRamassageId()).zoneId(clientRequestDto.getZoneId()).isEnable(false).isValidate(false).build();
         return clientRepository.save(client);
     }
 
+    /**
+     * Send notification that a new client has been created
+     *
+     * @param clientSaved
+     */
     private void sendNewClientNotification(Client clientSaved) {
         Notification notification = Notification.builder().title("Nouveau client").message("Un nouveau client a été créé").eventType(EventType.NOUVEAU_UTILISATEUR).triggerBy(clientSaved.getCreatedBy()).build();
         log.info("Sending new client notification: {}", notification);

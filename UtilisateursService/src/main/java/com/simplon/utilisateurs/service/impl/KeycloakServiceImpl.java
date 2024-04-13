@@ -1,5 +1,6 @@
 package com.simplon.utilisateurs.service.impl;
 
+import com.simplon.utilisateurs.dtos.request.AdminRequestDto;
 import com.simplon.utilisateurs.dtos.request.UserKeycloakRequestDto;
 import com.simplon.utilisateurs.service.KeycloakService;
 import com.simplon.utilisateurs.util.KeycloakUtil;
@@ -37,9 +38,6 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Value("${keycloak.realm}")
     private String realm;
 
-    @Value("${keycloak.roles.client}")
-    private String clientRole;
-
     private final KeycloakUtil keycloakUtil;
 
     /**
@@ -62,9 +60,38 @@ public class KeycloakServiceImpl implements KeycloakService {
         }
 
         String userId = CreatedResponseUtil.getCreatedId(response);
-        assignRoleAndGroupToUser(userId);
+        assignRoleAndGroupToUser(userId, userRequest.getRole());
         log.info("User created successfully in Keycloak with ID: {}", userId);
         return userId;
+    }
+
+    /**
+     * Get user from Keycloak by username
+     *
+     * @param userRequest
+     * @param userId
+     */
+    @Override
+    public void updateUserInKeycloak(UserKeycloakRequestDto userRequest, String userId) {
+        log.info("Updating user in Keycloak: {}", userId);
+
+        UsersResource usersResource = keycloakUtil.getRealmResource().users();
+        UserRepresentation user = usersResource.get(userId).toRepresentation();
+        user.setUsername(userRequest.getUsername());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getEmail());
+        user.setEnabled(userRequest.getEnabled());
+        user.setEmailVerified(false);
+
+        try {
+            usersResource.get(userId).update(user);
+            assignRoleAndGroupToUser(userId, userRequest.getRole());
+            log.info("User updated successfully in Keycloak with ID: {}", userId);
+        } catch (Exception e) {
+            log.error("Failed to update user in Keycloak", e);
+            throw new RuntimeException("Keycloak user update failed", e);
+        }
     }
 
     /**
@@ -86,14 +113,19 @@ public class KeycloakServiceImpl implements KeycloakService {
         user.setEmail(userRequest.getEmail());
         user.setCredentials(Arrays.asList(passwordCredential));
 
-        user.setEnabled(false);
+        user.setEnabled(userRequest.getEnabled());
         user.setEmailVerified(false);
 
         return user;
     }
 
-    // assign role to user and delete all other roles
-    private void assignRoleAndGroupToUser(String userId) {
+    /**
+     * Assign role to user and delete all other roles
+     *
+     * @param userId
+     * @param role
+     */
+    private void assignRoleAndGroupToUser(String userId, String role) {
         // Get UserResource
         UserResource userResource = keycloakUtil.getRealmResource().users().get(userId);
 
@@ -104,7 +136,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         userResource.roles().realmLevel().remove(userRoles);
 
         // Add new role
-        RoleRepresentation roleRepresentationToAdd = keycloakUtil.getRealmResource().roles().get(clientRole).toRepresentation();
+        RoleRepresentation roleRepresentationToAdd = keycloakUtil.getRealmResource().roles().get(role).toRepresentation();
         userResource.roles().realmLevel().add(Collections.singletonList(roleRepresentationToAdd));
 
     }
@@ -157,6 +189,5 @@ public class KeycloakServiceImpl implements KeycloakService {
             throw new RuntimeException("Keycloak user suspension failed", e);
         }
     }
-
 
 }
