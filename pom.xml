@@ -114,6 +114,7 @@
   <build>
     <pluginManagement>
       <plugins>
+        <!-- Existing plugins configuration -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -142,5 +143,20 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <!-- Plugins to be actually applied to the build -->
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>
