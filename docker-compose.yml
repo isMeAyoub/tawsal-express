@@ -1,6 +1,36 @@
 version: '3.1'
 
 services:
+  config-server:
+    container_name: config-server
+    image: config-server
+    ports:
+      - "8888:8888"
+
+
+  eureka-server:
+    container_name: europa
+    image: eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+
+  utilisateur-service:
+    container_name: utilisateur-service
+    image: utilisateurs-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - eureka-server
+      - config-server
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      SPRING_DATASOURCE_URL: jdbc:postgresql://utilisateurs-db:5222/utilisateurs-service
+
+
   postgres:
     container_name: postgres-keycloak
     image: postgres:16
@@ -40,8 +70,6 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
-    networks:
-      - db
     restart: unless-stopped
 
   bons-db:
@@ -145,8 +173,7 @@ services:
       - utilisateurs-db:/data/postgres
     ports:
       - "5222:5432"
-    networks:
-      - db
+
     restart: unless-stopped
 
   media-db:
@@ -167,6 +194,8 @@ services:
 networks:
   db:
     driver: bridge
+  ayoub:
+    driver: bridge
 
 volumes:
   bons-db:
@@ -179,4 +208,5 @@ volumes:
   media-db:
   rabbitmq-data:
   postgres_data:
-    driver: local
+  config-server:
+
