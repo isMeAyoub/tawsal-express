@@ -19,6 +19,7 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurituFilterChain (ServerHttpSecurity serverHttpSecurity) {
         serverHttpSecurity.authorizeExchange(exchanges -> exchanges
+                // TODO: add endpoint security
                         .anyExchange().permitAll())
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
